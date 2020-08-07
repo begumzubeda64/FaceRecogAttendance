@@ -6,6 +6,11 @@
 #    Aug 07, 2020 02:19:52 PM IST  platform: Windows NT
 
 import sys
+import add_student
+import add_subject
+import login
+import add_class
+import change_password
 
 try:
     import Tkinter as tk
@@ -47,6 +52,22 @@ def destroy_mainTop():
     w = None
 
 class mainTop:
+    def navStudent(self):
+        add_student.vp_start_gui()
+
+    def navSubject(self):
+        add_subject.vp_start_gui()
+
+    def navClass(self):
+        add_class.vp_start_gui()
+
+    def navChPass(self):
+        change_password.vp_start_gui()
+
+    def logoutUser(self):
+        root.destroy()
+        login.vp_start_gui()
+
     def __init__(self, top=None):
         '''This class configures and populates the toplevel window.
            top is the toplevel containing window.'''
@@ -205,17 +226,17 @@ class mainTop:
         self.menubar.add_cascade(menu=self.sub_menu1,
                 label="Add")
         self.sub_menu1.add_command(
-                label="Student")
+                label="Student", command=self.navStudent)
         self.sub_menu1.add_command(
-                label="Subject")
+                label="Subject", command=self.navSubject)
         self.sub_menu1.add_command(
-                label="Class")
+                label="Class", command=self.navClass)
         self.menubar.add_command(
                 label="Reports")
         self.menubar.add_command(
-                label="Change Password")
+                label="Change Password", command=self.navChPass)
         self.menubar.add_command(
-                label="Logout")
+                label="Logout", command=self.logoutUser)
 
 # The following code is added to facilitate the Scrolled widgets you specified.
 class AutoScroll(object):
