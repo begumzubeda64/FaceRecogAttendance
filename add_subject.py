@@ -6,6 +6,8 @@
 #    Aug 07, 2020 10:38:18 PM IST  platform: Windows NT
 
 import sys
+import model
+from tkinter import messagebox
 
 try:
     import Tkinter as tk
@@ -49,6 +51,22 @@ def destroy_addSubject():
     w = None
 
 class addSubject:
+    def addSubject(self):
+        name = self.txtSubName.get()
+        cls = self.comboClass.get()
+
+        if name != "" and cls != "Select Class":
+            isub = model.insertSubject(name, cls)
+            if isub:
+                messagebox.showinfo("Attendance - Add Subject", "Subject added succesfully!", master=root)
+                self.txtSubName.configure(text="")
+                self.comboClass.current(0)
+            else:
+                messagebox.showwarning("Attendance - Add Subject", "Failed to add subject or subject already exists!",
+                                       master=root)
+        else:
+            messagebox.showwarning("Attendance - Add Subject", "Subject Name and class field is required!", master=root)
+
     def __init__(self, top=None):
         '''This class configures and populates the toplevel window.
            top is the toplevel containing window.'''
@@ -124,7 +142,8 @@ class addSubject:
         self.comboClass = ttk.Combobox(self.Frame1)
         self.comboClass.place(relx=0.359, rely=0.403, relheight=0.072
                 , relwidth=0.498)
-        self.value_list = ['Select Class',]
+        self.value_list = ['Select Class']
+        model.readAllClass(self.value_list)
         self.comboClass.configure(values=self.value_list)
         self.comboClass.configure(font="-family {Yu Gothic UI Semibold} -size 12 -weight bold -slant roman -underline 0 -overstrike 0")
         self.comboClass.configure(state='readonly')
@@ -145,6 +164,7 @@ class addSubject:
         self.btnAddSub.configure(highlightcolor="black")
         self.btnAddSub.configure(pady="0")
         self.btnAddSub.configure(text='''Add''')
+        self.btnAddSub.configure(command=self.addSubject)
 
 if __name__ == '__main__':
     vp_start_gui()

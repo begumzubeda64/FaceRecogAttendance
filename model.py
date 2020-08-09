@@ -2,16 +2,6 @@ import mysql.connector as mysql
 from mysql.connector import Error
 import os
 
-#connecting to database
-con = mysql.connect(
-    host = "localhost",
-    user = "root",
-    password = "",
-    database = "attenddb"
-)
-
-# print(db,"Connected")
-cursor = con.cursor()
 
 #covert pic to binary file
 def convertToBinaryData(filename):
@@ -29,15 +19,32 @@ def write_file(data, filename):
 #inserting data to student table
 def insertStudent(rollno, name, pic, cls):
     try:
+        # connecting to database
+        con = mysql.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="attenddb"
+        )
+
+        # print(db,"Connected")
+        cursor = con.cursor()
         query = """INSERT INTO student(rollno, name, pic, class) VALUES (%s,%s,%s,%s)"""
+        path = "C:/"
+        ppath = os.path.join(path, f"xampp/htdocs/AttendanceFace/Images/{cls}")
+        if os.path.exists(ppath):
+            pass
+        else:
+            os.mkdir(ppath)
         stdPicture = convertToBinaryData(pic) #covert pic in binary
         insertTuple = (rollno, name, stdPicture, cls) #insert parameters
         result = cursor.execute(query, insertTuple) #execute query with parameters
         con.commit()
-        print("Inserted")
+        return True
 
     except mysql.Error as error:
         print("Failed inserting BLOB data into MySQL table {}".format(error))
+        return False
 
     finally:
         if (con.is_connected()):
@@ -48,6 +55,16 @@ def insertStudent(rollno, name, pic, cls):
 #reading pic file
 def readStudent(cls):
     try:
+        # connecting to database
+        con = mysql.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="attenddb"
+        )
+
+        # print(db,"Connected")
+        cursor = con.cursor()
         # query = """SELECT * from student where rollno = %s and class = %s"""
         querypic = "SELECT * FROM student WHERE class = %s"
         para = (cls,)
@@ -80,6 +97,105 @@ def readStudent(cls):
             cursor.close()
             con.close()
             print("MySQL connection is closed")
+
+#inserting class
+def insertClass(name):
+    try:
+        # connecting to database
+        con = mysql.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="attenddb"
+        )
+
+        # print(db,"Connected")
+        cursor = con.cursor()
+
+        queryclass = "SELECT * FROM classtbl WHERE class = %s"
+        para = (name,)
+
+        cursor.execute(queryclass, para)
+        record = cursor.fetchall()  # fetches all record
+        if len(record) == 0:
+            query = """INSERT INTO classtbl(class) VALUES (%s)"""
+            insertTuple = (name,) #insert parameters
+            result = cursor.execute(query, insertTuple) #execute query with parameters
+            con.commit()
+            return True
+
+    except mysql.Error as error:
+        print("Failed inserting data into MySQL table {}".format(error))
+        return False
+
+    finally:
+        if (con.is_connected()):
+            cursor.close()
+            con.close()
+
+#read all class-- values is an array
+def readAllClass(values):
+    try:
+        # connecting to database
+        con = mysql.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="attenddb"
+        )
+
+        # print(db,"Connected")
+        cursor = con.cursor()
+
+        queryclass = "SELECT class FROM classtbl"
+
+        cursor.execute(queryclass)
+        record = cursor.fetchall()  # fetches all record
+        for row in record:
+            values.append(row[0])
+
+    except mysql.Error as error:
+        print("Failed inserting data into MySQL table {}".format(error))
+
+    finally:
+        if (con.is_connected()):
+            cursor.close()
+            con.close()
+
+#insert subject
+def insertSubject(name, cls):
+    try:
+        # connecting to database
+        con = mysql.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="attenddb"
+        )
+
+        # print(db,"Connected")
+        cursor = con.cursor()
+
+        querysub = "SELECT * FROM subjecttbl WHERE subject = %s AND class = %s"
+        para = (name,cls,)
+
+        cursor.execute(querysub, para)
+        record = cursor.fetchall()  # fetches all record
+        if len(record) == 0:
+            query = """INSERT INTO subjecttbl(subject,class) VALUES (%s,%s)"""
+            insertTuple = (name,cls,) #insert parameters
+            result = cursor.execute(query, insertTuple) #execute query with parameters
+            con.commit()
+            return True
+
+    except mysql.Error as error:
+        print("Failed inserting data into MySQL table {}".format(error))
+        return False
+
+    finally:
+        if (con.is_connected()):
+            cursor.close()
+            con.close()
 
 # path = "C:/"
 # rollno = int(input("Enter roll no: "))

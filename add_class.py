@@ -6,6 +6,8 @@
 #    Aug 07, 2020 10:35:30 PM IST  platform: Windows NT
 
 import sys
+from tkinter import messagebox
+import model
 
 try:
     import Tkinter as tk
@@ -47,6 +49,18 @@ def destroy_Toplevel1():
     w = None
 
 class Toplevel1:
+    def addClass(self):
+        name = self.txtClass.get().upper()
+        if name != "":
+            iclass = model.insertClass(name)
+            if iclass:
+                messagebox.showinfo("Attendance - Add Class", "Class added succesfully!", master=root)
+                self.txtClass.configure(text="")
+            else:
+                messagebox.showwarning("Attendance - Add Class", "Failed to add class or class already exists!", master=root)
+        else:
+            messagebox.showwarning("Attendance - Add Class", "Class Name field is required!", master=root)
+
     def __init__(self, top=None):
         '''This class configures and populates the toplevel window.
            top is the toplevel containing window.'''
@@ -114,6 +128,7 @@ class Toplevel1:
         self.btnAddClass.configure(highlightcolor="black")
         self.btnAddClass.configure(pady="0")
         self.btnAddClass.configure(text='''Add''')
+        self.btnAddClass.configure(command=self.addClass)
 
 if __name__ == '__main__':
     vp_start_gui()
