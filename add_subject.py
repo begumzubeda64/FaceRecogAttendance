@@ -59,7 +59,7 @@ class addSubject:
             isub = model.insertSubject(name, cls)
             if isub:
                 messagebox.showinfo("Attendance - Add Subject", "Subject added succesfully!", master=root)
-                self.txtSubName.configure(text="")
+                self.txtSubName.delete(0, "end")
                 self.comboClass.current(0)
             else:
                 messagebox.showwarning("Attendance - Add Subject", "Failed to add subject or subject already exists!",
@@ -84,7 +84,7 @@ class addSubject:
         self.style.map('.',background=
             [('selected', _compcolor), ('active',_ana2color)])
 
-        top.geometry("841x624+650+150")
+        top.geometry("722x588+650+150")
         top.minsize(148, 1)
         top.maxsize(1924, 1055)
         top.resizable(1, 1)
@@ -152,7 +152,7 @@ class addSubject:
         self.comboClass.current(0)
 
         self.btnAddSub = tk.Button(self.Frame1)
-        self.btnAddSub.place(relx=0.37, rely=0.557, height=63, width=406)
+        self.btnAddSub.place(relx=0.37, rely=0.557, height=63, width=353)
         self.btnAddSub.configure(activebackground="#ececec")
         self.btnAddSub.configure(activeforeground="#000000")
         self.btnAddSub.configure(background="#eac515")

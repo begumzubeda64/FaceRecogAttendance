@@ -66,11 +66,11 @@ class Toplevel1:
             if istud:
                 messagebox.showinfo("Attendance - Add Student", "Student added succesfully!", master=root)
                 self.lblPicPath.configure(text="")
-                self.txtName.configure(text="")
-                self.txtRoll.configure(text="")
+                self.txtName.delete(0, "end")
+                self.txtRoll.delete(0, "end")
                 self.comboClass.current(0)
             else:
-                messagebox.showwarning("Attendance - Add Student", "Failed to Student!", master=root)
+                messagebox.showwarning("Attendance - Add Student", "Failed to Student or roll no already exists!", master=root)
         else:
             messagebox.showwarning("Attendance - Add Student", "Student Name, class, roll no and pic field is required!", master=root)
 
@@ -82,7 +82,7 @@ class Toplevel1:
             try:
                 # print("""here it comes: self.settings["template"].set(fname)""",fname)
                 if self.txtName.get() == "":
-                    self.txtName.delete(0)
+                    self.txtName.delete(0, "end")
                     self.txtName.insert(0, name.upper())
 
                 self.lblPicPath.configure(text=f)

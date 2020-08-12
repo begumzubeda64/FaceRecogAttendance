@@ -29,18 +29,30 @@ def insertStudent(rollno, name, pic, cls):
 
         # print(db,"Connected")
         cursor = con.cursor()
-        query = """INSERT INTO student(rollno, name, pic, class) VALUES (%s,%s,%s,%s)"""
-        path = "C:/"
-        ppath = os.path.join(path, f"xampp/htdocs/AttendanceFace/Images/{cls}")
-        if os.path.exists(ppath):
-            pass
+
+        queryclass = "SELECT * FROM student WHERE rollno = %s"
+        para = (rollno,)
+
+        cursor.execute(queryclass, para)
+        record = cursor.fetchall()  # fetches all record
+
+        if len(record) == 0:
+            query = """INSERT INTO student(rollno, name, pic, class) VALUES (%s,%s,%s,%s)"""
+            path = "C:/"
+            ppath = os.path.join(path, f"xampp/htdocs/AttendanceFace/Images/{cls}")
+            if os.path.exists(ppath):
+                pass
+            else:
+                os.mkdir(ppath)
+            stdPicture = convertToBinaryData(pic) #covert pic in binary
+            insertTuple = (rollno, name, stdPicture, cls) #insert parameters
+            result = cursor.execute(query, insertTuple) #execute query with parameters
+            picPath = os.path.join(path, f"xampp/htdocs/AttendanceFace/Images/{cls}/{name}.jpg")
+            write_file(stdPicture, picPath)  # writing image read from table and storing it with new name
+            con.commit()
+            return True
         else:
-            os.mkdir(ppath)
-        stdPicture = convertToBinaryData(pic) #covert pic in binary
-        insertTuple = (rollno, name, stdPicture, cls) #insert parameters
-        result = cursor.execute(query, insertTuple) #execute query with parameters
-        con.commit()
-        return True
+            return False
 
     except mysql.Error as error:
         print("Failed inserting BLOB data into MySQL table {}".format(error))
@@ -75,6 +87,7 @@ def readStudent(cls):
             name = row[1]
             image = row[2]
             clss = row[3]
+            print(type(image))
 
             path = "C:/"
             ppath = os.path.join(path, f"xampp/htdocs/AttendanceFace/Images/{clss}")
@@ -206,5 +219,5 @@ def insertSubject(name, cls):
 #
 # insertStudent(rollno, name, picPath, cls)
 
-# ml = readStudent('FYBSCCS')
+# ml = readStudent('SYMSCCS')
 # print(ml)

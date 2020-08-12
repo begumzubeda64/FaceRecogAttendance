@@ -55,7 +55,7 @@ class Toplevel1:
             iclass = model.insertClass(name)
             if iclass:
                 messagebox.showinfo("Attendance - Add Class", "Class added succesfully!", master=root)
-                self.txtClass.configure(text="")
+                self.txtClass.delete(0, "end")
             else:
                 messagebox.showwarning("Attendance - Add Class", "Failed to add class or class already exists!", master=root)
         else:
