@@ -166,6 +166,7 @@ def readAllClass(values):
         record = cursor.fetchall()  # fetches all record
         for row in record:
             values.append(row[0])
+        return values
 
     except mysql.Error as error:
         print("Failed inserting data into MySQL table {}".format(error))
@@ -204,6 +205,37 @@ def insertSubject(name, cls):
     except mysql.Error as error:
         print("Failed inserting data into MySQL table {}".format(error))
         return False
+
+    finally:
+        if (con.is_connected()):
+            cursor.close()
+            con.close()
+
+#read all class-- values is an array
+def readSubject(cls, values):
+    try:
+        # connecting to database
+        con = mysql.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="attenddb"
+        )
+
+        # print(db,"Connected")
+        cursor = con.cursor()
+
+        querysub = "SELECT subject FROM subjecttbl where class = %s"
+        para = (cls,)
+        cursor.execute(querysub, para)
+
+        record = cursor.fetchall()  # fetches all record
+        for row in record:
+            values.append(row[0])
+        return values
+
+    except mysql.Error as error:
+        print("Failed inserting data into MySQL table {}".format(error))
 
     finally:
         if (con.is_connected()):

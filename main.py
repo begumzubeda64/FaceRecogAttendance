@@ -11,6 +11,8 @@ import add_subject
 import login
 import add_class
 import change_password
+import model
+from tkinter import messagebox
 
 try:
     import Tkinter as tk
@@ -68,6 +70,16 @@ class mainTop:
         root.destroy()
         login.vp_start_gui()
 
+    def onselect(self, evt):
+        self.scrollSubject.delete(1, len(self.value_list))
+        del self.value_list[1:]
+        selected = self.scrollClass.curselection()
+        selectClass = self.scrollClass.get(selected)
+        self.vl = model.readSubject(selectClass, self.value_list)
+        for i in range(1, len(self.vl)):
+            self.scrollSubject.insert(i, self.vl[i])
+
+
     def __init__(self, top=None):
         '''This class configures and populates the toplevel window.
            top is the toplevel containing window.'''
@@ -114,7 +126,12 @@ class mainTop:
         self.scrollClass.configure(highlightcolor="#d9d9d9")
         self.scrollClass.configure(selectbackground="blue")
         self.scrollClass.configure(selectforeground="white")
-        self.scrollClass.insert(0,"Select Class")
+        # self.scrollClass.insert(0,"Select Class")
+        self.value_list = ["Select Class"]
+        self.vl = model.readAllClass(self.value_list)
+        for i in range(len(self.vl)):
+            self.scrollClass.insert(i, self.vl[i])
+        self.scrollClass.bind('<<ListboxSelect>>', self.onselect)
 
         self.scrollSubject = ScrolledListBox(self.Frame1)
         self.scrollSubject.place(relx=0.026, rely=0.508, relheight=0.407
@@ -128,7 +145,8 @@ class mainTop:
         self.scrollSubject.configure(highlightcolor="#d9d9d9")
         self.scrollSubject.configure(selectbackground="blue")
         self.scrollSubject.configure(selectforeground="white")
-        self.scrollSubject.insert(1,"Select Subject")
+        self.value_list = ["Select Subject"]
+        self.scrollSubject.insert(0, self.value_list[0])
 
         self.Label1 = tk.Label(self.Frame1)
         self.Label1.place(relx=0.405, rely=0.204, height=34, width=152)
@@ -167,18 +185,18 @@ class mainTop:
         self.Label1_3.configure(highlightcolor="black")
         self.Label1_3.configure(text='''Teacher Name''')
 
-        self.tctTeacher = tk.Entry(self.Frame1)
-        self.tctTeacher.place(relx=0.641, rely=0.356,height=34, relwidth=0.319)
-        self.tctTeacher.configure(background="white")
-        self.tctTeacher.configure(borderwidth="2")
-        self.tctTeacher.configure(disabledforeground="#a3a3a3")
-        self.tctTeacher.configure(font="-family {Yu Gothic UI Semibold} -size 11 -weight bold -slant roman -underline 0 -overstrike 0")
-        self.tctTeacher.configure(foreground="#000000")
-        self.tctTeacher.configure(highlightbackground="#d9d9d9")
-        self.tctTeacher.configure(highlightcolor="black")
-        self.tctTeacher.configure(insertbackground="black")
-        self.tctTeacher.configure(selectbackground="blue")
-        self.tctTeacher.configure(selectforeground="white")
+        self.txtTeacher = tk.Entry(self.Frame1)
+        self.txtTeacher.place(relx=0.641, rely=0.356,height=34, relwidth=0.319)
+        self.txtTeacher.configure(background="white")
+        self.txtTeacher.configure(borderwidth="2")
+        self.txtTeacher.configure(disabledforeground="#a3a3a3")
+        self.txtTeacher.configure(font="-family {Yu Gothic UI Semibold} -size 11 -weight bold -slant roman -underline 0 -overstrike 0")
+        self.txtTeacher.configure(foreground="#000000")
+        self.txtTeacher.configure(highlightbackground="#d9d9d9")
+        self.txtTeacher.configure(highlightcolor="black")
+        self.txtTeacher.configure(insertbackground="black")
+        self.txtTeacher.configure(selectbackground="blue")
+        self.txtTeacher.configure(selectforeground="white")
 
         self.btnAttend = tk.Button(self.Frame1)
         self.btnAttend.place(relx=0.523, rely=0.593, height=123, width=236)
@@ -356,6 +374,7 @@ def _on_shiftmouse(event, widget):
 
 if __name__ == '__main__':
     vp_start_gui()
+
 
 
 
