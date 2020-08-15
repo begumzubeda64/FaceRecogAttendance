@@ -6,7 +6,7 @@ from datetime import datetime
 from model import readStudent
 
 #c is student class
-def Attend(c, s):
+def Attend(c, s, t, l, ty):
     cl = c
     path = 'Images'
     images = [] #store images
@@ -35,13 +35,13 @@ def Attend(c, s):
                 # print(myDataList)
                 for line in myDataList:
                     entry = line.split(',')
-                    if entry[2] != 'Name':
-                        nameList.append(entry[2])
+                    if entry[1] != 'Name':
+                        nameList.append(entry[1])
                 if name not in nameList:
                     now = datetime.now()
-                    # print(now)
-                    dtString = now.strftime('%H:%M:%S')
-                    f.writelines(f'\n{c},{s},{name},{dtString}')
+                    lec = str(l)
+                    dtString = now.strftime('%d-%m-%Y')
+                    f.writelines(f'\n{c},{name},{s},{t},{lec},{ty},{dtString}')
 
         encodeListKnown = findEncodings(images)
         # print(len(encodeListKnown))

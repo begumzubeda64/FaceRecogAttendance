@@ -56,26 +56,30 @@ def destroy_Toplevel1():
 
 class Toplevel1:
     def addStudent(self):
-        roll = self.txtRoll.get()
         name = self.txtName.get()
         cls = self.comboClass.get()
         p = self.lblPicPath.cget("text")
 
-        if name != "" and cls != "Select Class" and roll != "" and p != "":
-            istud = model.insertStudent(roll, name, self.pic, cls)
-            if istud:
-                messagebox.showinfo("Attendance - Add Student", "Student added succesfully!", master=root)
-                self.lblPicPath.configure(text="")
-                self.txtName.delete(0, "end")
-                self.txtRoll.delete(0, "end")
-                self.comboClass.current(0)
+        try:
+            roll = int(self.txtRoll.get())
+            if name != "" and cls != "Select Class" and roll != "" and p != "":
+                istud = model.insertStudent(roll, name, self.pic, cls)
+                if istud:
+                    messagebox.showinfo("Attendance - Add Student", "Student added succesfully!", master=root)
+                    self.lblPicPath.configure(text="")
+                    self.txtName.delete(0, "end")
+                    self.txtRoll.delete(0, "end")
+                    self.comboClass.current(0)
+                else:
+                    messagebox.showwarning("Attendance - Add Student", "Failed to Student or roll no already exists!", master=root)
             else:
-                messagebox.showwarning("Attendance - Add Student", "Failed to Student or roll no already exists!", master=root)
-        else:
-            messagebox.showwarning("Attendance - Add Student", "Student Name, class, roll no and pic field is required!", master=root)
+                messagebox.showwarning("Attendance - Add Student", "Student Name, class, roll no and pic field is required!", master=root)
+        except ValueError:
+            messagebox.showwarning("Attendance - Add Student",
+                                   "Only Numbers are allowed in the roll no field!", master=root)
 
     def load_file(self):
-        fname = askopenfilename(filetypes=(("Image Files", "*.jpg;*.png;*.jpeg"), ("Template files", "*.tplate"), ("All files", "*.*")),master=root)
+        fname = askopenfilename(filetypes=(("Image Files", "*.jpg;*.jpeg;*.png;"), ("Template files", "*.tplate")),master=root)
         f = os.path.basename(fname)
         name = f.split(".")[0]
         if fname:
@@ -118,7 +122,7 @@ class Toplevel1:
                         pass
                     else:
                         os.mkdir(ppath)
-                    print("Image " + name + ".jpg saved")
+                    # print("Image " + name + ".jpg saved")
                     filePath = f'C:/xampp/htdocs/AttendanceFace/Images/{cls}/{name}.jpg'
                     cv2.imwrite(filePath, img)
                     file = os.path.basename(filePath)

@@ -44,10 +44,13 @@ def insertStudent(rollno, name, pic, cls):
                 pass
             else:
                 os.mkdir(ppath)
+            pp = os.path.basename(pic)#filename
+            ext = os.path.splitext(pp)[1]#file extension
             stdPicture = convertToBinaryData(pic) #covert pic in binary
             insertTuple = (rollno, name, stdPicture, cls) #insert parameters
             result = cursor.execute(query, insertTuple) #execute query with parameters
-            picPath = os.path.join(path, f"xampp/htdocs/AttendanceFace/Images/{cls}/{name}.jpg")
+            n = name.upper()
+            picPath = os.path.join(path, f"xampp/htdocs/AttendanceFace/Images/{cls}/{n}{ext}")
             write_file(stdPicture, picPath)  # writing image read from table and storing it with new name
             con.commit()
             return True
@@ -80,26 +83,10 @@ def readStudent(cls):
         # query = """SELECT * from student where rollno = %s and class = %s"""
         querypic = "SELECT * FROM student WHERE class = %s"
         para = (cls,)
-        nameList = []
 
         cursor.execute(querypic, para)
         record = cursor.fetchall()#fetches all record
         if len(record) != 0:
-            for row in record:
-                name = row[1]
-                image = row[2]
-                clss = row[3]
-                nameList.append(name)
-
-                path = "C:/"
-                ppath = os.path.join(path, f"xampp/htdocs/AttendanceFace/Images/{clss}")
-                if os.path.exists(ppath):
-                    pass
-                else:
-                    os.mkdir(ppath)
-                picPath = os.path.join(path, f"xampp/htdocs/AttendanceFace/Images/{clss}/{name}.jpg")
-                write_file(image, picPath) #writing image read from table and storing it with new name
-
             myList = os.listdir(f'Images/{cls}')  # stores list of images in the path 'Images'
             return myList
         else:
