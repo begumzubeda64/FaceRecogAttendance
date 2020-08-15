@@ -80,26 +80,30 @@ def readStudent(cls):
         # query = """SELECT * from student where rollno = %s and class = %s"""
         querypic = "SELECT * FROM student WHERE class = %s"
         para = (cls,)
+        nameList = []
 
         cursor.execute(querypic, para)
         record = cursor.fetchall()#fetches all record
-        for row in record:
-            name = row[1]
-            image = row[2]
-            clss = row[3]
-            print(type(image))
+        if len(record) != 0:
+            for row in record:
+                name = row[1]
+                image = row[2]
+                clss = row[3]
+                nameList.append(name)
 
-            path = "C:/"
-            ppath = os.path.join(path, f"xampp/htdocs/AttendanceFace/Images/{clss}")
-            if os.path.exists(ppath):
-                pass
-            else:
-                os.mkdir(ppath)
-            picPath = os.path.join(path, f"xampp/htdocs/AttendanceFace/Images/{clss}/{name}.jpg")
-            write_file(image, picPath) #writing image read from table and storing it with new name
+                path = "C:/"
+                ppath = os.path.join(path, f"xampp/htdocs/AttendanceFace/Images/{clss}")
+                if os.path.exists(ppath):
+                    pass
+                else:
+                    os.mkdir(ppath)
+                picPath = os.path.join(path, f"xampp/htdocs/AttendanceFace/Images/{clss}/{name}.jpg")
+                write_file(image, picPath) #writing image read from table and storing it with new name
 
-        myList = os.listdir(f'Images/{cls}')  # stores list of images in the path 'Images'
-        return myList
+            myList = os.listdir(f'Images/{cls}')  # stores list of images in the path 'Images'
+            return myList
+        else:
+            return ""
 
 
     except mysql.Error as error:

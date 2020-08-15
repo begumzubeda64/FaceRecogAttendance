@@ -12,6 +12,7 @@ import login
 import add_class
 import change_password
 import model
+import AttendancePro
 from tkinter import messagebox
 
 try:
@@ -79,6 +80,21 @@ class mainTop:
         for i in range(1, len(self.vl)):
             self.scrollSubject.insert(i, self.vl[i])
 
+    def markAttend(self):
+        c = self.scrollClass.curselection()
+        s = self.scrollSubject.curselection()
+        if c != () and s != ():
+            selectClass = self.scrollClass.get(c)
+            selectSubject = self.scrollSubject.get(s)
+            if selectClass != "Select Class" and selectSubject != "Select Subject":
+                a = AttendancePro.Attend(selectClass, selectSubject)
+                if a == False:
+                    messagebox.showinfo("Attendance", "No students in this class! Please add some students.", master=root)
+            else:
+                messagebox.showwarning("Attendance", "Class field and Subject field is required! Note: If subject(s) are not available for the class please do add subjects.", master=root)
+        else:
+            messagebox.showwarning("Attendance", "Class field and Subject field is required! Note: If subject(s) are not available for the class please do add subjects.", master=root)
+
 
     def __init__(self, top=None):
         '''This class configures and populates the toplevel window.
@@ -115,6 +131,7 @@ class mainTop:
         self.Frame1.configure(highlightcolor="black")
 
         self.scrollClass = ScrolledListBox(self.Frame1)
+        self.scrollClass.configure(exportselection=False)
         self.scrollClass.place(relx=0.026, rely=0.067, relheight=0.407
                 , relwidth=0.319)
         self.scrollClass.configure(background="white")
@@ -134,6 +151,7 @@ class mainTop:
         self.scrollClass.bind('<<ListboxSelect>>', self.onselect)
 
         self.scrollSubject = ScrolledListBox(self.Frame1)
+        self.scrollSubject.configure(exportselection=False)
         self.scrollSubject.place(relx=0.026, rely=0.508, relheight=0.407
                 , relwidth=0.319)
         self.scrollSubject.configure(background="white")
@@ -211,6 +229,7 @@ class mainTop:
         self.btnAttend.configure(highlightcolor="black")
         self.btnAttend.configure(pady="0")
         self.btnAttend.configure(text='''Mark Attendance''')
+        self.btnAttend.configure(command=self.markAttend)
 
         self.menubar = tk.Menu(top,font="TkMenuFont",bg=_bgcolor,fg=_fgcolor)
         top.configure(menu = self.menubar)
