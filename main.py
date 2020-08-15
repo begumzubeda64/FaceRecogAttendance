@@ -90,7 +90,22 @@ class mainTop:
         teacher = self.txtTeacher.get()
         lec = self.txtLec.get()
         t = self.comboLecType.get()
-        p = re.compile('[0-2][0-9][:][0-5][0-9]-[0-2][0-9][:][0-5][0-9]')
+        p = re.compile('[0-2][0-9][:][0-5][0-9]-[0-2][0-9][:][0-5][0-9]') #checks for pattern eg 12:00-13:00
+
+        if lec != "" and p.match(lec): #if you enter more then 23:59 time like 24:00 or 29:00 the 24 or 29 will be automatically be replaced by 23
+            s1 = lec.split("-")[0]
+            s2 = lec.split("-")[1]
+            if s1.startswith('2') and int(s1[1]) > 3:
+                x = s1.replace(s1[1],"3")
+                lec = x+"-"+s2
+            if s2.startswith('2') and int(s2[1]) > 3:
+                x = s2.replace(s2[1], "3")
+                lec = s1 + "-" + x
+            if s1.startswith('2') and int(s1[1]) > 3 and s2.startswith('2') and int(s2[1]) > 3:
+                x = s1.replace(s1[1], "3")
+                y = s2.replace(s2[1], "3")
+                lec = x + "-" + y
+
         if c != () and s != ():
             selectClass = self.scrollClass.get(c)
             selectSubject = self.scrollSubject.get(s)
