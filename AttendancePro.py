@@ -4,6 +4,7 @@ import face_recognition
 import os
 from datetime import datetime
 from model import readStudent
+from model import insertLec
 
 #c is student class
 def Attend(c, s, t, l, ty):
@@ -14,7 +15,6 @@ def Attend(c, s, t, l, ty):
     myList = readStudent(cl) #stores list of images in the path 'Images'
 
     if myList != "":
-        print(myList)
         for cls in myList:
             curimg = cv2.imread(f'{path}/{cl}/{cls}')
             images.append(curimg)
@@ -28,19 +28,14 @@ def Attend(c, s, t, l, ty):
                 encodeList.append(encode) #append encoding of each img to the list
             return encodeList
 
-        def markAttendance(name):
-            with open('attendance.csv', "r+") as f:
-                myDataList = f.readlines()
-                nameList = [] #stores name list
-                # print(myDataList)
-                for line in myDataList:
-                    entry = line.split(',')
-                    if entry[1] != 'Name':
-                        nameList.append(entry[1])
-                if name not in nameList:
-                    now = datetime.now()
-                    lec = str(l)
-                    dtString = now.strftime('%d-%m-%Y')
+        def markAttendance(name): #name is roll no
+            now = datetime.now()
+            lec = str(l)
+            dtString = now.strftime('%d-%m-%Y')
+            il = insertLec(cl,name,s,t,lec,ty,dtString)
+            if il:
+                print("Succesfully inserted!")
+                with open('attendance.csv', "r+") as f:
                     f.writelines(f'\n{c},{name},{s},{t},{lec},{ty},{dtString}')
 
         encodeListKnown = findEncodings(images)
@@ -71,7 +66,6 @@ def Attend(c, s, t, l, ty):
                     cv2.rectangle(img, (x1, y2-35), (x2, y2), (255, 0, 255), cv2.FILLED) #filled rectangle
                     cv2.putText(img, name, (x1+6, y2-6), cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 255), 2) #put text on fileed rectangle
                     markAttendance(name)
-
 
             cv2.imshow('webcam',img)
             k = cv2.waitKey(1)

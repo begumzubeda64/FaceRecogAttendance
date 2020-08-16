@@ -1,4 +1,2 @@
-Class,Name,Subject,Teacher Name,Lecture Frame,Type,Date
-SYMSCCS,ZUBEDA ABBAS,Ubiqutious Computing,Amol Sir,11:00-02:00,Lecture,15-08-2020
-SYMSCCS,ELON MUSK,Ubiqutious Computing,Amol Sir,11:00-02:00,Lecture,15-08-2020
-FYBSCCS,BEGUM ZUBEDA,Python Programming Part I,Naren Sir,23:00-23:00,Practical,15-08-2020
+Class,Roll No,Subject,Teacher Name,Lecture Frame,Type,Date
+SYMSCCS,2,Ubiqutious Computing,Amol Sir,08:00-12:30,Lecture,16-08-2020

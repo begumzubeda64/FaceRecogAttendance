@@ -96,7 +96,7 @@ class Toplevel1:
 
     def takePic(self):
         cls = self.comboClass.get()
-        name = self.txtName.get().upper()
+        name = str(self.txtRoll.get())
         if name != "" and cls != "Select Class":
             cam = cv2.VideoCapture(0)
 

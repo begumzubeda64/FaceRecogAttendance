@@ -49,8 +49,8 @@ def insertStudent(rollno, name, pic, cls):
             stdPicture = convertToBinaryData(pic) #covert pic in binary
             insertTuple = (rollno, name, stdPicture, cls) #insert parameters
             result = cursor.execute(query, insertTuple) #execute query with parameters
-            n = name.upper()
-            picPath = os.path.join(path, f"xampp/htdocs/AttendanceFace/Images/{cls}/{n}{ext}")
+            r = str(rollno)
+            picPath = os.path.join(path, f"xampp/htdocs/AttendanceFace/Images/{cls}/{r}{ext}")
             write_file(stdPicture, picPath)  # writing image read from table and storing it with new name
             con.commit()
             return True
@@ -227,6 +227,40 @@ def readSubject(cls, values):
 
     except mysql.Error as error:
         print("Failed inserting data into MySQL table {}".format(error))
+
+    finally:
+        if (con.is_connected()):
+            cursor.close()
+            con.close()
+
+def insertLec(cls, name, sub, t, lf, ty, d):
+    try:
+        # connecting to database
+        con = mysql.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="attenddb"
+        )
+
+        cursor = con.cursor()
+        queryatt = "SELECT * FROM attendancetbl WHERE rollno = %s AND lframe = %s AND ldate = %s"
+        iname = int(name)
+        para = (iname, lf, d,)
+
+        cursor.execute(queryatt, para)
+        record = cursor.fetchall()  # fetches all record
+        if len(record) == 0:
+            query = """INSERT INTO attendancetbl(class,rollno,subject,teacher,lframe,type,ldate) VALUES (%s,%s,%s,%s,%s,%s,%s)"""
+            insertTuple = (cls,iname,sub,t,lf,ty,d)  # insert parameters
+            result = cursor.execute(query, insertTuple)  # execute query with parameters
+            con.commit()
+            return True
+
+
+    except mysql.Error as error:
+        print("Failed inserting data into MySQL table {}".format(error))
+        return False
 
     finally:
         if (con.is_connected()):
