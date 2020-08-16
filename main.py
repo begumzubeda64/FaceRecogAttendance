@@ -278,6 +278,7 @@ class mainTop:
         self.comboLecType.configure(font=font9)
         self.comboLecType.configure(textvariable=main_support.combobox)
         self.comboLecType.configure(takefocus="")
+        self.comboLecType.configure(state="readonly")
         self.comboLecType.current(0)
 
         self.menubar = tk.Menu(top,font="TkMenuFont",bg=_bgcolor,fg=_fgcolor)
