@@ -244,9 +244,9 @@ def insertLec(cls, name, sub, t, lf, ty, d):
         )
 
         cursor = con.cursor()
-        queryatt = "SELECT * FROM attendancetbl WHERE rollno = %s AND lframe = %s AND ldate = %s"
+        queryatt = "SELECT * FROM attendancetbl WHERE class = %s AND rollno = %s AND lframe = %s AND ldate = %s"
         iname = int(name)
-        para = (iname, lf, d,)
+        para = (cls, iname, lf, d,)
 
         cursor.execute(queryatt, para)
         record = cursor.fetchall()  # fetches all record

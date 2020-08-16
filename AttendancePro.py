@@ -35,7 +35,7 @@ def Attend(c, s, t, l, ty):
             il = insertLec(cl,name,s,t,lec,ty,dtString)
             if il:
                 print("Succesfully inserted!")
-                with open('attendance.csv', "r+") as f:
+                with open('attendance.csv', "a") as f:
                     f.writelines(f'\n{c},{name},{s},{t},{lec},{ty},{dtString}')
 
         encodeListKnown = findEncodings(images)
