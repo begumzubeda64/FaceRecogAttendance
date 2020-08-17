@@ -55,9 +55,8 @@ class Toplevel1:
         old_pass = self.txtOld.get()
         new_pass = self.txtNew.get()
 
-        rch = changePassword(old_pass, new_pass)
         if old_pass != new_pass:
-            if rch != False:
+            if changePassword(old_pass, new_pass) != False:
                 msg = messagebox.showinfo("Attendance - Change Password", "Password Updated Successfully!", master=root)
                 if msg:
                     root.destroy()
