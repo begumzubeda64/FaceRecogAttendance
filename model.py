@@ -1,7 +1,8 @@
 import mysql.connector as mysql
 from mysql.connector import Error
 import os
-
+from penc import check_password
+from penc import hash_password
 
 #covert pic to binary file
 def convertToBinaryData(filename):
@@ -306,10 +307,10 @@ def readAccount(user):
 
         # print(db,"Connected")
         cursor = con.cursor()
-        querysub = "SELECT pwd FROM account WHERE username = %s"
+        querylog = "SELECT pwd FROM account WHERE username = %s"
         para = (user,)
 
-        cursor.execute(querysub, para)
+        cursor.execute(querylog, para)
         record = cursor.fetchall()
         if len(record) != 0:
             for row in record:
@@ -326,15 +327,47 @@ def readAccount(user):
             cursor.close()
             con.close()
 
+def changePassword(p, new_p):
+    try:
+        # connecting to database
+        con = mysql.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="attenddb"
+        )
 
-# path = "C:/"
-# rollno = int(input("Enter roll no: "))
-# name = input("Enter name: ")
-# pic = input("Enter name of the pic ending with .jpg/.png/.svg: ")
-# picPath = os.path.join(path, f"xampp/htdocs/AttendanceFace/Images/{pic}")
-# cls = input("Enter class: ")
-#
-# insertStudent(rollno, name, picPath, cls)
+        # print(db,"Connected")
+        cursor = con.cursor()
+        querych = "SELECT pwd FROM account"
 
-# ml = readStudent('SYMSCCS')
-# print(ml)
+        cursor.execute(querych)
+        record = cursor.fetchall()
+        ch = False
+        ohpd = ""
+        for row in record:
+            pwd = row[0]
+            if check_password(pwd, p):
+                ch = True
+                ohpd = pwd
+                break
+
+        if ch == True:
+            sql = "UPDATE account SET pwd = %s WHERE pwd = %s"
+            n = hash_password(new_p)
+            para = (n, ohpd,)
+            cursor.execute(sql, para)
+            con.commit()
+            return True
+        else:
+            return False
+
+
+    except mysql.Error as error:
+        print("Failed reading data into MySQL table {}".format(error))
+        return False
+
+    finally:
+        if (con.is_connected()):
+            cursor.close()
+            con.close()

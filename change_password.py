@@ -6,6 +6,10 @@
 #    Aug 07, 2020 10:32:03 PM IST  platform: Windows NT
 
 import sys
+from tkinter import messagebox
+from model import changePassword
+import login
+import main
 
 try:
     import Tkinter as tk
@@ -47,6 +51,19 @@ def destroy_Toplevel1():
     w = None
 
 class Toplevel1:
+    def chPassword(self):
+        old_pass = self.txtOld.get()
+        new_pass = self.txtNew.get()
+
+        rch = changePassword(old_pass, new_pass)
+
+        if rch != False:
+            msg = messagebox.showinfo("Attendance - Change Password", "Password Updated Successfully!", master=root)
+            if msg:
+                root.destroy()
+        else:
+            messagebox.showwarning("Attendance - Change Password", "Cannot Update - Invalid Password!", master=root)
+
     def __init__(self, top=None):
         '''This class configures and populates the toplevel window.
            top is the toplevel containing window.'''
@@ -91,6 +108,7 @@ class Toplevel1:
         self.txtOld.configure(font=font11)
         self.txtOld.configure(foreground="#000000")
         self.txtOld.configure(insertbackground="black")
+        self.txtOld.configure(show="*")
 
         self.Label1_1 = tk.Label(self.Frame1)
         self.Label1_1.place(relx=0.11, rely=0.382, height=48, width=159)
@@ -116,6 +134,7 @@ class Toplevel1:
         self.txtNew.configure(insertbackground="black")
         self.txtNew.configure(selectbackground="blue")
         self.txtNew.configure(selectforeground="white")
+        self.txtNew.configure(show="*")
 
         self.btnChange = tk.Button(self.Frame1)
         self.btnChange.place(relx=0.41, rely=0.552, height=63, width=316)
@@ -130,7 +149,7 @@ class Toplevel1:
         self.btnChange.configure(highlightcolor="black")
         self.btnChange.configure(pady="0")
         self.btnChange.configure(text='''Change''')
-
+        self.btnChange.configure(command=self.chPassword)
 if __name__ == '__main__':
     vp_start_gui()
 

@@ -80,7 +80,7 @@ class Toplevel1:
             else:
                 messagebox.showwarning("Attendance Login", "Invalid Password!")
         else:
-            messagebox.showwarning("Attendance Login", "Invalid Username!")
+            messagebox.showwarning("Attendance Login", "Invalid Username or Password!")
 
     def __init__(self, top=None):
         '''This class configures and populates the toplevel window.

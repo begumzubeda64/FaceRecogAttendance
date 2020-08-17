@@ -1,7 +1,7 @@
 import uuid
 import hashlib
-from model import insertAccount
-from model import readAccount
+# from model import insertAccount
+# from model import readAccount
 
 def hash_password(password):
    # uuid is used to generate a random number of the specified password
