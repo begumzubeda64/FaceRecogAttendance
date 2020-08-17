@@ -56,13 +56,15 @@ class Toplevel1:
         new_pass = self.txtNew.get()
 
         rch = changePassword(old_pass, new_pass)
-
-        if rch != False:
-            msg = messagebox.showinfo("Attendance - Change Password", "Password Updated Successfully!", master=root)
-            if msg:
-                root.destroy()
+        if old_pass != new_pass:
+            if rch != False:
+                msg = messagebox.showinfo("Attendance - Change Password", "Password Updated Successfully!", master=root)
+                if msg:
+                    root.destroy()
+            else:
+                messagebox.showwarning("Attendance - Change Password", "Cannot Update - Invalid Old Password!", master=root)
         else:
-            messagebox.showwarning("Attendance - Change Password", "Cannot Update - Invalid Password!", master=root)
+            messagebox.showwarning("Attendance - Change Password", "Old Password feild and new password feild cannot be same!", master=root)
 
     def __init__(self, top=None):
         '''This class configures and populates the toplevel window.
