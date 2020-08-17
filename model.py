@@ -267,6 +267,66 @@ def insertLec(cls, name, sub, t, lf, ty, d):
             cursor.close()
             con.close()
 
+def insertAccount(user, p):
+    try:
+        # connecting to database
+        con = mysql.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="attenddb"
+        )
+
+        # print(db,"Connected")
+        cursor = con.cursor()
+        query = """INSERT INTO account(username,pwd) VALUES (%s,%s)"""
+        insertTuple = (user,p,) #insert parameters
+        result = cursor.execute(query, insertTuple) #execute query with parameters
+        con.commit()
+        return True
+
+    except mysql.Error as error:
+        print("Failed inserting data into MySQL table {}".format(error))
+        return False
+
+    finally:
+        if (con.is_connected()):
+            cursor.close()
+            con.close()
+
+def readAccount(user):
+    try:
+        # connecting to database
+        con = mysql.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="attenddb"
+        )
+
+        # print(db,"Connected")
+        cursor = con.cursor()
+        querysub = "SELECT pwd FROM account WHERE username = %s"
+        para = (user,)
+
+        cursor.execute(querysub, para)
+        record = cursor.fetchall()
+        if len(record) != 0:
+            for row in record:
+                pwd = row[0]
+                return pwd
+        else:
+            return ""
+
+    except mysql.Error as error:
+        print("Failed reading data into MySQL table {}".format(error))
+
+    finally:
+        if (con.is_connected()):
+            cursor.close()
+            con.close()
+
+
 # path = "C:/"
 # rollno = int(input("Enter roll no: "))
 # name = input("Enter name: ")

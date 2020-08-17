@@ -8,6 +8,8 @@
 import sys
 from tkinter import messagebox
 import main
+from model import readAccount
+from penc import check_password
 
 try:
     import Tkinter as tk
@@ -66,13 +68,19 @@ class Toplevel1:
     def loginUser(self):
         username = self.txtUser.get()
         password = self.txtPass.get()
-        if username == 'admin' and password == 'kc1234':
-            msg = messagebox.showinfo("Attendance Login", "You have logged in Succesfully!")
-            if msg:
-                root.destroy()
-                main.vp_start_gui()
+
+        racc = readAccount(username)
+
+        if racc != "":
+            if check_password(racc, password):
+                msg = messagebox.showinfo("Attendance Login", "You have logged in Succesfully!")
+                if msg:
+                    root.destroy()
+                    main.vp_start_gui()
+            else:
+                messagebox.showwarning("Attendance Login", "Invalid Password!")
         else:
-            messagebox.showwarning("Attendance Login", "Invalid Username or Password!")
+            messagebox.showwarning("Attendance Login", "Invalid Username!")
 
     def __init__(self, top=None):
         '''This class configures and populates the toplevel window.
