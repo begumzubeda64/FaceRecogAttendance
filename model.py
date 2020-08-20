@@ -3,6 +3,7 @@ from mysql.connector import Error
 import os
 from penc import check_password
 from penc import hash_password
+from datetime import datetime
 
 #covert pic to binary file
 def convertToBinaryData(filename):
@@ -362,6 +363,37 @@ def changePassword(p, new_p):
         else:
             return False
 
+
+    except mysql.Error as error:
+        print("Failed reading data into MySQL table {}".format(error))
+        return False
+
+    finally:
+        if (con.is_connected()):
+            cursor.close()
+            con.close()
+
+def readlframes(cls):
+    try:
+        # connecting to database
+        con = mysql.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="attenddb"
+        )
+        l = []
+        cursor = con.cursor()
+        queryatt = "SELECT lframe FROM attendancetbl WHERE class = %s AND ldate = %s"
+        now = datetime.now()
+        d = now.strftime('%d-%m-%Y')
+        para = (cls, d,)
+
+        cursor.execute(queryatt, para)
+        record = cursor.fetchall()  # fetches all record
+        for row in record:
+            l.append(row[0])
+        return l
 
     except mysql.Error as error:
         print("Failed reading data into MySQL table {}".format(error))

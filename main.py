@@ -106,16 +106,52 @@ class mainTop:
                 y = s2.replace(s2[1], "3")
                 lec = x + "-" + y
 
+
         if c != () and s != ():
             selectClass = self.scrollClass.get(c)
             selectSubject = self.scrollSubject.get(s)
             if selectClass != "Select Class" and selectSubject != "Select Subject" and teacher != "" and lec != "" and t != "Select Type":
-                if p.match(lec):
+                rl = model.readlframes(selectClass)
+                b = False
+
+                if rl != []:
+                    s1 = lec.split("-")[0]
+                    h1 = s1.split(":")[0]
+                    m1 = s1.split(":")[1]
+
+                    ss = lec.split("-")[1]
+                    hs = ss.split(":")[0]
+                    ms = ss.split(":")[1]
+
+                    for row in rl:
+                        s2s = row.split("-")[0]
+                        h2s = s2s.split(":")[0]
+                        m2s = s2s.split(":")[1]
+
+                        s2 = row.split("-")[1]
+                        h2 = s2.split(":")[0]
+                        m2 = s2.split(":")[1]
+
+                        if int(h1) < int(h2) and int(h1) >= int(h2s):
+                            print("Inside first if")
+                            b = True
+                            break
+                        elif int(h1) == int(h2) and int(m1) < int(m2):
+                            print("Second If")
+                            b = True
+                            break
+                        elif int(h1) == int(hs) and int(m1) == int(ms):
+                            print("Third If")
+                            b = True
+                            break
+
+                    print("b:",b)
+                if p.match(lec) and b == False:
                     a = AttendancePro.Attend(selectClass, selectSubject, teacher, lec, t)
                     if a == False:
                         messagebox.showinfo("Attendance", "No students in this class! Please add some students.", master=root)
                 else:
-                    messagebox.showwarning("Attendance", "Lecture Frame should match pattern like 08:00-13:00, 24 hour format", master=root)
+                    messagebox.showwarning("Attendance", "Lecture Frame should match pattern like 08:00-13:00, 24 hour format, should not exist in other time frame and start time and end time should not be same", master=root)
             else:
                 messagebox.showwarning("Attendance", "Class, Subject, teacher name, lecture frame and lecture type feilds are required! Note: If subject(s) are not available for the selected class please do add subjects.", master=root)
         else:
