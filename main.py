@@ -96,7 +96,7 @@ class mainTop:
             s1 = lec.split("-")[0]
             s2 = lec.split("-")[1]
             if s1.startswith('2') and int(s1[1]) > 3:
-                x = s1.replace(s1[1],"3")
+                x = s1.replace(s1[1], "3")
                 lec = x+"-"+s2
             if s2.startswith('2') and int(s2[1]) > 3:
                 x = s2.replace(s2[1], "3")
@@ -132,16 +132,24 @@ class mainTop:
                         h2 = s2.split(":")[0]
                         m2 = s2.split(":")[1]
 
-                        if int(h1) < int(h2) and int(h1) >= int(h2s):
+                        if int(h1) > int(hs):
                             print("Inside first if")
                             b = True
                             break
+                        elif int(h1) < int(h2) and int(h1) >= int(h2s):
+                            print("Second if")
+                            b = True
+                            break
                         elif int(h1) == int(h2) and int(m1) < int(m2):
-                            print("Second If")
+                            print("Third If")
                             b = True
                             break
                         elif int(h1) == int(hs) and int(m1) == int(ms):
-                            print("Third If")
+                            print("Fourth If")
+                            b = True
+                            break
+                        elif int(h1) < int(h2) and int(hs) >= int(h2s):
+                            print("Fifth if")
                             b = True
                             break
 
