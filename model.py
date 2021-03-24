@@ -104,6 +104,41 @@ def readStudent(cls):
             con.close()
             print("MySQL connection is closed")
 
+#reading all students based on class
+def readAllStudent(cls, values):
+    try:
+        # connecting to database
+        con = mysql.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="attenddb"
+        )
+
+        # print(db,"Connected")
+        cursor = con.cursor()
+        query = "SELECT * FROM student WHERE class = %s"
+        para = (cls,)
+
+        cursor.execute(query, para)
+        record = cursor.fetchall()#fetches all record
+        for row in record:
+            dic = {}
+            dic['roll'] = row[0]
+            dic['name'] = row[1]
+            values.append(dic)
+        return values
+
+
+    except mysql.Error as error:
+        print("Failed to read BLOB data from MySQL table {}".format(error))
+
+    finally:
+        if (con.is_connected()):
+            cursor.close()
+            con.close()
+            print("MySQL connection is closed")
+
 #inserting class
 def insertClass(name):
     try:
