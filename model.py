@@ -131,7 +131,7 @@ def readAllStudent(cls, values):
 
 
     except mysql.Error as error:
-        print("Failed to read BLOB data from MySQL table {}".format(error))
+        print("Failed to read data from MySQL table {}".format(error))
 
     finally:
         if (con.is_connected()):

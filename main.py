@@ -10,6 +10,7 @@ import sys
 import view_class
 import view_subject
 import add_student
+import view_student
 import add_subject
 import login
 import add_class
@@ -63,6 +64,9 @@ def destroy_mainTop():
 class mainTop:
     def navStudent(self):
         add_student.vp_start_gui()
+
+    def navViewStudent(self):
+        view_student.vp_start_gui()
 
     def navSubject(self):
         add_subject.vp_start_gui()
@@ -352,7 +356,7 @@ class mainTop:
         self.menubar.add_cascade(menu=self.sub_menu,
                 label="View")
         self.sub_menu.add_command(
-                label="Student")
+                label="Student", command=self.navViewStudent)
         self.sub_menu.add_command(
                 label="Subject", command=self.navViewSubject)
         self.sub_menu.add_command(
