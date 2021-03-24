@@ -8,6 +8,7 @@
 import sys
 import sys
 import view_class
+import view_subject
 import add_student
 import add_subject
 import login
@@ -65,6 +66,9 @@ class mainTop:
 
     def navSubject(self):
         add_subject.vp_start_gui()
+
+    def navViewSubject(self):
+        view_subject.vp_start_gui()
 
     def navClass(self):
         add_class.vp_start_gui()
@@ -350,7 +354,7 @@ class mainTop:
         self.sub_menu.add_command(
                 label="Student")
         self.sub_menu.add_command(
-                label="Subject")
+                label="Subject", command=self.navViewSubject)
         self.sub_menu.add_command(
                 label="Class", command=self.navViewClass)
         self.sub_menu1 = tk.Menu(top,
