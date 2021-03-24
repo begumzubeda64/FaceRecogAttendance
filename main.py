@@ -120,7 +120,6 @@ class mainTop:
                 ym = y.replace(sm2, "00")
                 lec = xm + "-" + ym
 
-
         if c != () and s != ():
             selectClass = self.scrollClass.get(c)
             selectSubject = self.scrollSubject.get(s)
@@ -128,15 +127,15 @@ class mainTop:
                 rl = model.readlframes(selectClass)
                 b = False
 
-                if rl != []:
-                    s1 = lec.split("-")[0]
-                    h1 = s1.split(":")[0]
-                    m1 = s1.split(":")[1]
+                s1 = lec.split("-")[0]
+                h1 = s1.split(":")[0]
+                m1 = s1.split(":")[1]
 
-                    ss = lec.split("-")[1]
-                    hs = ss.split(":")[0]
-                    ms = ss.split(":")[1]
+                ss = lec.split("-")[1]
+                hs = ss.split(":")[0]
+                ms = ss.split(":")[1]
 
+                if rl != [] and int(h1) < int(hs):
                     for row in rl:
                         s2s = row.split("-")[0]
                         h2s = s2s.split(":")[0]
@@ -146,34 +145,29 @@ class mainTop:
                         h2 = s2.split(":")[0]
                         m2 = s2.split(":")[1]
 
-                        if int(h1) > int(hs):
-                            print("Inside first if")
-                            b = True
-                            break
-                        elif int(h1) < int(h2) and int(h1) >= int(h2s):
-                            print("Second if")
+                        if int(h1) < int(h2) and int(h1) >= int(h2s):
+                            print("First if")
                             b = True
                             break
                         elif int(h1) == int(h2) and int(m1) < int(m2):
-                            print("Third If")
+                            print("Second If")
                             b = True
                             break
                         elif int(h1) == int(hs) and int(m1) == int(ms):
-                            print("Fourth If")
+                            print("Third If")
                             b = True
                             break
                         elif int(h1) < int(h2) and int(hs) >= int(h2s):
-                            print("Fifth if")
+                            print("Fourth if")
                             b = True
                             break
 
-                    print("b:",b)
-                if p.match(lec) and b == False:
+                if p.match(lec) and b == False and int(h1) < int(hs):
                     a = AttendancePro.Attend(selectClass, selectSubject, teacher, lec, t)
                     if a == False:
                         messagebox.showinfo("Attendance", "No students in this class! Please add some students.", master=root)
                 else:
-                    messagebox.showwarning("Attendance", "Lecture Frame should match pattern like 08:00-13:00, 24 hour format, should not exist in other time frame and start time and end time should not be same", master=root)
+                    messagebox.showwarning("Attendance", "Lecture Frame should match pattern like 08:00-13:00, 24 hour format, it should not exist in other time frame, start time and end time should not be same, and also start time should be less than end time", master=root)
             else:
                 messagebox.showwarning("Attendance", "Class, Subject, teacher name, lecture frame and lecture type feilds are required! Note: If subject(s) are not available for the selected class please do add subjects.", master=root)
         else:
