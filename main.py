@@ -7,6 +7,7 @@
 
 import sys
 import sys
+import view_class
 import add_student
 import add_subject
 import login
@@ -68,6 +69,9 @@ class mainTop:
     def navClass(self):
         add_class.vp_start_gui()
 
+    def navViewClass(self):
+        view_class.vp_start_gui()
+
     def navChPass(self):
         change_password.vp_start_gui()
 
@@ -94,17 +98,27 @@ class mainTop:
 
         if lec != "" and p.match(lec): #if you enter more than 23:59 time like 24:00 or 29:00 the 24 or 29 will be automatically be replaced by 23
             s1 = lec.split("-")[0]
+            sh1 = s1.split(":")[0]
+            sm1 = s1.split(":")[1]
+
             s2 = lec.split("-")[1]
+            sh2 = s2.split(":")[0]
+            sm2 = s2.split(":")[1]
+
             if s1.startswith('2') and int(s1[1]) > 3:
-                x = s1.replace(s1[1], "3")
-                lec = x+"-"+s2
+                x = s1.replace(sh1, "00")
+                xm = x.replace(sm1, "00")
+                lec = xm + "-" + s2
             if s2.startswith('2') and int(s2[1]) > 3:
-                x = s2.replace(s2[1], "3")
-                lec = s1 + "-" + x
+                x = s2.replace(sh2, "00")
+                xm = x.replace(sm2, "00")
+                lec = s1 + "-" + xm
             if s1.startswith('2') and int(s1[1]) > 3 and s2.startswith('2') and int(s2[1]) > 3:
-                x = s1.replace(s1[1], "3")
-                y = s2.replace(s2[1], "3")
-                lec = x + "-" + y
+                x = s1.replace(sh1, "00")
+                xm = x.replace(sm1, "00")
+                y = s2.replace(sh2, "00")
+                ym = y.replace(sm2, "00")
+                lec = xm + "-" + ym
 
 
         if c != () and s != ():
@@ -344,7 +358,7 @@ class mainTop:
         self.sub_menu.add_command(
                 label="Subject")
         self.sub_menu.add_command(
-                label="Class")
+                label="Class", command=self.navViewClass)
         self.sub_menu1 = tk.Menu(top,
                 activebackground="#ececec",
                 activeborderwidth=1,
