@@ -89,8 +89,17 @@ def readStudent(cls):
         cursor.execute(querypic, para)
         record = cursor.fetchall()#fetches all record
         if len(record) != 0:
-            myList = os.listdir(f'Images/{cls}')  # stores list of images in the path 'Images'
-            return myList
+            ppath = f'Images/{cls}'
+            if os.path.exists(ppath):
+                myList = os.listdir(ppath)  # stores list of images in the path 'Images'
+                return myList
+            else:
+                os.mkdir(ppath)
+                for row in record:
+                    picpath = f'Images/{cls}/{row[0]}.jpg'
+                    write_file(row[2], picpath)
+                myList = os.listdir(ppath)
+                return myList
         else:
             return ""
 
