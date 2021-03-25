@@ -40,8 +40,9 @@ def insertStudent(rollno, name, pic, cls):
 
         if len(record) == 0:
             query = """INSERT INTO student(rollno, name, pic, class) VALUES (%s,%s,%s,%s)"""
-            path = "C:/"
-            ppath = os.path.join(path, f"xampp/htdocs/AttendanceFace/Images/{cls}")
+            #path = "C:/"
+            #ppath = os.path.join(path, f"xampp/htdocs/AttendanceFace/Images/{cls}")
+            ppath = f'Images/{cls}'
             if os.path.exists(ppath):
                 pass
             else:
@@ -52,7 +53,8 @@ def insertStudent(rollno, name, pic, cls):
             insertTuple = (rollno, name, stdPicture, cls) #insert parameters
             result = cursor.execute(query, insertTuple) #execute query with parameters
             r = str(rollno)
-            picPath = os.path.join(path, f"xampp/htdocs/AttendanceFace/Images/{cls}/{r}{ext}")
+            #picPath = os.path.join(path, f"xampp/htdocs/AttendanceFace/Images/{cls}/{r}{ext}")
+            picPath = f'Images/{cls}/{r}{ext}'
             write_file(stdPicture, picPath)  # writing image read from table and storing it with new name
             con.commit()
             return True
