@@ -317,6 +317,36 @@ def readSubject(cls, values):
             cursor.close()
             con.close()
 
+#deleting a subject
+def deleteSubject(sub, cls):
+    try:
+        # connecting to database
+        con = mysql.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="attenddb"
+        )
+
+        # print(db,"Connected")
+        cursor = con.cursor()
+
+        query = "DELETE FROM subjecttbl WHERE subject = %s AND class = %s"
+        para = (sub, cls,)
+        cursor.execute(query, para)
+        con.commit()
+        return True
+
+    except mysql.Error as error:
+        print("Failed deleting data into MySQL table {}".format(error))
+        return False
+
+    finally:
+        if (con.is_connected()):
+            cursor.close()
+            con.close()
+            print("MySQL connection is closed")
+
 def insertLec(cls, name, sub, t, lf, ty, d):
     try:
         # connecting to database

@@ -67,7 +67,7 @@ class Toplevel1:
             else:
                 messagebox.showwarning("Attendance - Students", "Please select a class and a student!", master=root)
         else:
-            messagebox.showwarning("Attendance - Students", "Please select a class and a student!",master=root)
+            messagebox.showwarning("Attendance - Students", "Please select a class and a student!", master=root)
 
     def onselect(self, evt):
         self.scrollStudent.delete(1, len(self.value_list))

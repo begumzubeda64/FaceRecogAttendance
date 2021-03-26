@@ -7,6 +7,7 @@
 
 import sys
 import model
+from tkinter import messagebox
 
 try:
     import Tkinter as tk
@@ -48,6 +49,26 @@ def destroy_Toplevel1():
     w = None
 
 class Toplevel1:
+    def delSubject(self):
+        cls = self.scrollClass.curselection()
+        sub = self.scrollSubject.curselection()
+
+        if cls != () and sub != ():
+            selectedCls = self.scrollClass.get(cls)
+            selectedSub = self.scrollSubject.get(sub)
+            if selectedCls != "Select Class" and selectedSub != "Subject Name":
+                result = model.deleteSubject(selectedSub, selectedCls)
+                if result == True:
+                    messagebox.showinfo("Attendance - Subjects", "Successfully Deleted a subject.", master=root)
+                    self.scrollSubject.delete(sub)
+                    self.value_list.pop(sub[0])
+                else:
+                    messagebox.showwarning("Attendance - Subjects", "Error Deleting Subject!.", master=root)
+            else:
+                messagebox.showwarning("Attendance - Subjects", "Please select a class and a subject!", master=root)
+        else:
+            messagebox.showwarning("Attendance - Subjects", "Please select a class and a subject!", master=root)
+
     def onselect(self, evt):
         self.scrollSubject.delete(1, len(self.value_list))
         del self.value_list[1:]
@@ -152,6 +173,7 @@ class Toplevel1:
         self.btnDelete.configure(highlightcolor="black")
         self.btnDelete.configure(pady="0")
         self.btnDelete.configure(text='''Delete''')
+        self.btnDelete.configure(command=self.delSubject)
 
 # The following code is added to facilitate the Scrolled widgets you specified.
 class AutoScroll(object):
