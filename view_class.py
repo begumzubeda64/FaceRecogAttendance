@@ -49,6 +49,24 @@ def destroy_Toplevel1():
     w = None
 
 class Toplevel1:
+    def delClass(self):
+        cls = self.scrollClass.curselection()
+
+        if cls != ():
+            selectedCls = self.scrollClass.get(cls)
+            if selectedCls != "Class Name":
+                result = model.deleteClass(selectedCls)
+                if result == True:
+                    messagebox.showinfo("Attendance - Subjects", "Successfully Deleted a class.", master=root)
+                    self.scrollClass.delete(cls)
+                    self.value_list.pop(cls[0])
+                else:
+                    messagebox.showwarning("Attendance - Class", "Error Deleting Class!.", master=root)
+            else:
+                messagebox.showwarning("Attendance - Class", "Please select a class!", master=root)
+        else:
+            messagebox.showwarning("Attendance - Class", "Please select a class!", master=root)
+
     def __init__(self, top=None):
         '''This class configures and populates the toplevel window.
            top is the toplevel containing window.'''
@@ -128,6 +146,7 @@ class Toplevel1:
         self.btnDelete.configure(highlightcolor="black")
         self.btnDelete.configure(pady="0")
         self.btnDelete.configure(text='''Delete''')
+        self.btnDelete.configure(command=self.delClass)
 
 # The following code is added to facilitate the Scrolled widgets you specified.
 class AutoScroll(object):

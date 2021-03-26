@@ -4,6 +4,7 @@ import os
 from penc import check_password
 from penc import hash_password
 from datetime import datetime
+import shutil
 
 #covert pic to binary file
 def convertToBinaryData(filename):
@@ -250,6 +251,48 @@ def readAllClass(values):
         if (con.is_connected()):
             cursor.close()
             con.close()
+
+#deleting a class
+def deleteClass(cls):
+    try:
+        # connecting to database
+        con = mysql.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="attenddb"
+        )
+
+        # print(db,"Connected")
+        cursor = con.cursor()
+
+        clsquery = "DELETE FROM classtbl WHERE class = %s"
+        clspara = (cls,)
+        cursor.execute(clsquery, clspara,)
+
+        stquery = "DELETE FROM student WHERE class = %s"
+        stpara = (cls,)
+        cursor.execute(stquery, stpara,)
+
+        subquery = "DELETE FROM subjecttbl WHERE class = %s"
+        subpara = (cls,)
+        cursor.execute(subquery, subpara,)
+        con.commit()
+
+        ppath= f'Images/{cls}'
+        if os.path.exists(ppath):
+            shutil.rmtree(ppath)
+        return True
+
+    except mysql.Error as error:
+        print("Failed deleting data into MySQL table {}".format(error))
+        return False
+
+    finally:
+        if (con.is_connected()):
+            cursor.close()
+            con.close()
+            print("MySQL connection is closed")
 
 #insert subject
 def insertSubject(name, cls):
