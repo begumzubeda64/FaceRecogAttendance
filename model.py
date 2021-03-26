@@ -128,7 +128,7 @@ def readAllStudent(cls, values):
 
         # print(db,"Connected")
         cursor = con.cursor()
-        query = "SELECT * FROM student WHERE class = %s"
+        query = "SELECT * FROM student WHERE class = %s ORDER BY rollno"
         para = (cls,)
 
         cursor.execute(query, para)
@@ -143,6 +143,42 @@ def readAllStudent(cls, values):
 
     except mysql.Error as error:
         print("Failed to read data from MySQL table {}".format(error))
+
+    finally:
+        if (con.is_connected()):
+            cursor.close()
+            con.close()
+            print("MySQL connection is closed")
+
+#deleting a student
+def deleteStudent(rollno, cls):
+    try:
+        # connecting to database
+        con = mysql.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="attenddb"
+        )
+
+        # print(db,"Connected")
+        cursor = con.cursor()
+
+        query = "DELETE FROM student WHERE rollno = %s AND class = %s"
+        para = (rollno, cls,)
+        cursor.execute(query, para)
+        con.commit()
+        ppath1 = f'Images/{cls}/{rollno}.jpg'
+        ppath2 = f'Images/{cls}/{rollno}.png'
+        if os.path.exists(ppath1):
+            os.remove(ppath1)
+        else:
+            os.remove(ppath2)
+        return True
+
+    except mysql.Error as error:
+        print("Failed deleting data into MySQL table {}".format(error))
+        return False
 
     finally:
         if (con.is_connected()):

@@ -7,6 +7,7 @@
 
 import sys
 import model
+from tkinter import messagebox
 
 try:
     import Tkinter as tk
@@ -48,6 +49,26 @@ def destroy_Toplevel1():
     w = None
 
 class Toplevel1:
+    def delStudent(self):
+        cls = self.scrollClass.curselection()
+        roll = self.scrollStudent.curselection()
+
+        if cls != () and roll != ():
+            selectedCls = self.scrollClass.get(cls)
+            selectedRoll = self.scrollStudent.get(roll).split(" ")[0]
+            if selectedCls != "Select Class" and selectedRoll != "RollNo":
+                result = model.deleteStudent(selectedRoll, selectedCls)
+                if result == True:
+                    messagebox.showinfo("Attendance - Students", "Successfully Deleted a student.", master=root)
+                    self.scrollStudent.delete(roll)
+                    self.value_list.pop(roll[0])
+                else:
+                    messagebox.showwarning("Attendance - Students", "Error Deleting Student!.", master=root)
+            else:
+                messagebox.showwarning("Attendance - Students", "Please select a class and a student!", master=root)
+        else:
+            messagebox.showwarning("Attendance - Students", "Please select a class and a student!",master=root)
+
     def onselect(self, evt):
         self.scrollStudent.delete(1, len(self.value_list))
         del self.value_list[1:]
@@ -95,6 +116,7 @@ class Toplevel1:
         self.Frame1.configure(background="#00ffff")
 
         self.scrollClass = ScrolledListBox(self.Frame1)
+        self.scrollClass.configure(exportselection=False)
         self.scrollClass.place(relx=0.043, rely=0.078, relheight=0.596
                 , relwidth=0.223)
         self.scrollClass.configure(background="white")
@@ -113,6 +135,7 @@ class Toplevel1:
         self.scrollClass.bind('<<ListboxSelect>>', self.onselect)
 
         self.scrollStudent = ScrolledListBox(self.Frame1)
+        self.scrollStudent.configure(exportselection=False)
         self.scrollStudent.place(relx=0.302, rely=0.078, relheight=0.596
                 , relwidth=0.655)
         self.scrollStudent.configure(background="white")
@@ -155,6 +178,7 @@ class Toplevel1:
         self.btnDelete.configure(highlightcolor="black")
         self.btnDelete.configure(pady="0")
         self.btnDelete.configure(text='''Delete''')
+        self.btnDelete.configure(command=self.delStudent)
 
 # The following code is added to facilitate the Scrolled widgets you specified.
 class AutoScroll(object):

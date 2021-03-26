@@ -91,6 +91,7 @@ class Toplevel1:
         self.Frame1.configure(background="#00ffff")
 
         self.scrollClass = ScrolledListBox(self.Frame1)
+        self.scrollClass.configure(exportselection=False)
         self.scrollClass.place(relx=0.043, rely=0.072, relheight=0.608
                 , relwidth=0.251)
         self.scrollClass.configure(background="white")
@@ -109,6 +110,7 @@ class Toplevel1:
         self.scrollClass.bind('<<ListboxSelect>>', self.onselect)
 
         self.scrollSubject = ScrolledListBox(self.Frame1)
+        self.scrollSubject.configure(exportselection=False)
         self.scrollSubject.place(relx=0.329, rely=0.072, relheight=0.608
                 , relwidth=0.621)
         self.scrollSubject.configure(background="white")
