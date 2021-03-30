@@ -322,6 +322,7 @@ class mainTop:
         self.btnAttend.configure(highlightcolor="black")
         self.btnAttend.configure(pady="0")
         self.btnAttend.configure(text='''Mark Attendance''')
+        self.btnAttend.configure(command=self.markAttend)
 
         self.Label1_4 = tk.Label(self.Frame1)
         self.Label1_4.place(relx=0.405, rely=0.462, height=32, width=153)
@@ -340,9 +341,11 @@ class mainTop:
                 , relwidth=0.323)
         self.value_list = ['Select Type','Lecture','Practical','Workshop/Seminar',]
         self.comboLecType.configure(values=self.value_list)
+        self.comboLecType.configure(state='readonly')
         self.comboLecType.configure(font="-family {Yu Gothic UI Semibold} -size 12 -weight bold -slant roman -underline 0 -overstrike 0")
         self.comboLecType.configure(textvariable=main_support.combobox)
         self.comboLecType.configure(takefocus="")
+        self.comboLecType.current(0)
 
         self.btnRefresh = tk.Button(self.Frame1)
         self.btnRefresh.place(relx=0.261, rely=0.019, height=23, width=66)
