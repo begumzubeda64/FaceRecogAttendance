@@ -8,6 +8,7 @@
 import sys
 from tkinter import messagebox
 import model
+import edit_class
 
 try:
     import Tkinter as tk
@@ -62,6 +63,20 @@ class Toplevel1:
                     self.value_list.pop(cls[0])
                 else:
                     messagebox.showwarning("Attendance - Class", "Error Deleting Class!.", master=root)
+            else:
+                messagebox.showwarning("Attendance - Class", "Please select a class!", master=root)
+        else:
+            messagebox.showwarning("Attendance - Class", "Please select a class!", master=root)
+
+    def editClass(self):
+        cls = self.scrollClass.curselection()
+
+        if cls != ():
+            selectedCls = self.scrollClass.get(cls)
+            if selectedCls != "Class Name":
+                view_class_support.set_Tk_var()
+                view_class_support.val.set(selectedCls)
+                edit_class.vp_start_gui()
             else:
                 messagebox.showwarning("Attendance - Class", "Please select a class!", master=root)
         else:
@@ -132,6 +147,7 @@ class Toplevel1:
         self.btnEdit.configure(highlightcolor="black")
         self.btnEdit.configure(pady="0")
         self.btnEdit.configure(text='''Edit''')
+        self.btnEdit.configure(command=self.editClass)
 
         self.btnDelete = tk.Button(self.Frame1)
         self.btnDelete.place(relx=0.548, rely=0.768, height=63, width=246)
