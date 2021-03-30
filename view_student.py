@@ -8,6 +8,7 @@
 import sys
 import model
 from tkinter import messagebox
+import edit_student
 
 try:
     import Tkinter as tk
@@ -64,6 +65,25 @@ class Toplevel1:
                     self.value_list.pop(roll[0])
                 else:
                     messagebox.showwarning("Attendance - Students", "Error Deleting Student!.", master=root)
+            else:
+                messagebox.showwarning("Attendance - Students", "Please select a class and a student!", master=root)
+        else:
+            messagebox.showwarning("Attendance - Students", "Please select a class and a student!", master=root)
+
+    def editStudent(self):
+        cls = self.scrollClass.curselection()
+        st = self.scrollStudent.curselection()
+
+        if cls != () and st != ():
+            selectedCls = self.scrollClass.get(cls)
+            selectedRoll = self.scrollStudent.get(st).split(" ")[0]
+            if selectedCls != "Select Class" and selectedRoll != "RollNo":
+                selectedName = self.scrollStudent.get(st).split("{:<30s}".format(selectedRoll))[1]
+                view_student_support.set_Tk_var()
+                view_student_support.cval.set(selectedCls)
+                view_student_support.rval.set(selectedRoll)
+                view_student_support.nval.set(selectedName.strip())
+                edit_student.vp_start_gui()
             else:
                 messagebox.showwarning("Attendance - Students", "Please select a class and a student!", master=root)
         else:
@@ -164,6 +184,7 @@ class Toplevel1:
         self.btnEdit.configure(highlightcolor="black")
         self.btnEdit.configure(pady="0")
         self.btnEdit.configure(text='''Edit''')
+        self.btnEdit.configure(command=self.editStudent)
 
         self.btnDelete = tk.Button(self.Frame1)
         self.btnDelete.place(relx=0.547, rely=0.738, height=53, width=208)
