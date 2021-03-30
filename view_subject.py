@@ -8,6 +8,7 @@
 import sys
 import model
 from tkinter import messagebox
+import edit_subject
 
 try:
     import Tkinter as tk
@@ -64,6 +65,23 @@ class Toplevel1:
                     self.value_list.pop(sub[0])
                 else:
                     messagebox.showwarning("Attendance - Subjects", "Error Deleting Subject!.", master=root)
+            else:
+                messagebox.showwarning("Attendance - Subjects", "Please select a class and a subject!", master=root)
+        else:
+            messagebox.showwarning("Attendance - Subjects", "Please select a class and a subject!", master=root)
+
+    def editSubject(self):
+        cls = self.scrollClass.curselection()
+        sub = self.scrollSubject.curselection()
+
+        if cls != () and sub != ():
+            selectedCls = self.scrollClass.get(cls)
+            selectedSub = self.scrollSubject.get(sub)
+            if selectedCls != "Select Class" and selectedSub != "Subject Name":
+                view_subject_support.set_Tk_var()
+                view_subject_support.cval.set(selectedCls)
+                view_subject_support.sval.set(selectedSub)
+                edit_subject.vp_start_gui()
             else:
                 messagebox.showwarning("Attendance - Subjects", "Please select a class and a subject!", master=root)
         else:
@@ -159,6 +177,7 @@ class Toplevel1:
         self.btnEdit.configure(highlightcolor="black")
         self.btnEdit.configure(pady="0")
         self.btnEdit.configure(text='''Edit''')
+        self.btnEdit.configure(command=self.editSubject)
 
         self.btnDelete = tk.Button(self.Frame1)
         self.btnDelete.place(relx=0.529, rely=0.74, height=53, width=208)
