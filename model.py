@@ -41,22 +41,9 @@ def insertStudent(rollno, name, pic, cls):
 
         if len(record) == 0:
             query = """INSERT INTO student(rollno, name, pic, class) VALUES (%s,%s,%s,%s)"""
-            #path = "C:/"
-            #ppath = os.path.join(path, f"xampp/htdocs/AttendanceFace/Images/{cls}")
-            ppath = f'Images/{cls}'
-            if os.path.exists(ppath):
-                pass
-            else:
-                os.mkdir(ppath)
-            pp = os.path.basename(pic)#filename
-            ext = os.path.splitext(pp)[1]#file extension
             stdPicture = convertToBinaryData(pic) #covert pic in binary
             insertTuple = (rollno, name, stdPicture, cls) #insert parameters
             result = cursor.execute(query, insertTuple) #execute query with parameters
-            r = str(rollno)
-            #picPath = os.path.join(path, f"xampp/htdocs/AttendanceFace/Images/{cls}/{r}{ext}")
-            picPath = f'Images/{cls}/{r}{ext}'
-            write_file(stdPicture, picPath)  # writing image read from table and storing it with new name
             con.commit()
             return True
         else:
@@ -85,24 +72,14 @@ def readStudent(cls):
 
         # print(db,"Connected")
         cursor = con.cursor()
-        # query = """SELECT * from student where rollno = %s and class = %s"""
         querypic = "SELECT * FROM student WHERE class = %s"
         para = (cls,)
 
         cursor.execute(querypic, para)
         record = cursor.fetchall()#fetches all record
         if len(record) != 0:
-            ppath = f'Images/{cls}'
-            if os.path.exists(ppath):
-                myList = os.listdir(ppath)  # stores list of images in the path 'Images'
-                return myList
-            else:
-                os.mkdir(ppath)
-                for row in record:
-                    picpath = f'Images/{cls}/{row[0]}.jpg'
-                    write_file(row[2], picpath)
-                myList = os.listdir(ppath)
-                return myList
+            myList = record
+            return myList
         else:
             return ""
 
@@ -169,12 +146,6 @@ def deleteStudent(rollno, cls):
         para = (rollno, cls,)
         cursor.execute(query, para)
         con.commit()
-        ppath1 = f'Images/{cls}/{rollno}.jpg'
-        ppath2 = f'Images/{cls}/{rollno}.png'
-        if os.path.exists(ppath1):
-            os.remove(ppath1)
-        else:
-            os.remove(ppath2)
         return True
 
     except mysql.Error as error:
@@ -278,10 +249,6 @@ def deleteClass(cls):
         subpara = (cls,)
         cursor.execute(subquery, subpara,)
         con.commit()
-
-        ppath= f'Images/{cls}'
-        if os.path.exists(ppath):
-            shutil.rmtree(ppath)
         return True
 
     except mysql.Error as error:

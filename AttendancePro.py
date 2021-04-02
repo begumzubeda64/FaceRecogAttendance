@@ -5,20 +5,24 @@ import os
 from datetime import datetime
 from model import readStudent
 from model import insertLec
+import model
 
 #c is student class
 def Attend(c, s, t, l, ty):
     cl = c
-    path = 'Images'
+    #path = 'Images'
     images = [] #store images
-    clasNames = [] #store images name with no .jpg
+    clasNames = [] #store images name as rollno
     myList = readStudent(cl) #stores list of images in the path 'Images'
 
     if myList != "":
         for cls in myList:
-            curimg = cv2.imread(f'{path}/{cl}/{cls}')
+            bi = cls[2]
+            i = np.frombuffer(bi, dtype='uint8')
+            curimg = cv2.imdecode(i, cv2.IMREAD_UNCHANGED)
+            #curimg = cv2.imread(f'{path}/{cl}/{cls}')
             images.append(curimg)
-            clasNames.append(os.path.splitext(cls)[0]) #split paths first part befre jpg and stores in the list
+            clasNames.append(str(cls[0])) #roll no
 
         def findEncodings(images):
             encodeList = []

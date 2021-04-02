@@ -150,7 +150,7 @@ class mainTop:
                 hs = ss.split(":")[0]
                 ms = ss.split(":")[1]
 
-                if rl != [] and int(h1) <= int(hs) and int(m1) < int(ms):
+                if rl != [] and int(h1) < int(hs) or (int(h1) == int(hs) and int(m1) < int(ms)):
                     for row in rl:
                         s2s = row.split("-")[0]
                         h2s = s2s.split(":")[0]
@@ -177,7 +177,7 @@ class mainTop:
                             b = True
                             break
 
-                if p.match(lec) and b == False and int(h1) <= int(hs) and int(m1) < int(ms):
+                if p.match(lec) and b == False and int(h1) < int(hs) or (int(h1) == int(hs) and int(m1) < int(ms)):
                     a = AttendancePro.Attend(selectClass, selectSubject, teacher, lec, t)
                     if a == False:
                         messagebox.showinfo("Attendance", "No students in this class! Please add some students.", master=root)
