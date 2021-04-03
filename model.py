@@ -128,6 +128,53 @@ def readAllStudent(cls, values):
             con.close()
             print("MySQL connection is closed")
 
+#updating data to student table
+def updateStudent(prollno, pcls, rollno, name, pic, cls):
+    try:
+        # connecting to database
+        con = mysql.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="attenddb"
+        )
+
+        # print(db,"Connected")
+        cursor = con.cursor()
+        record = []
+        if prollno != rollno:
+            queryclass = "SELECT * FROM student WHERE rollno = %s AND class = %s"
+            para = (rollno, cls,)
+
+            cursor.execute(queryclass, para)
+            record = cursor.fetchall()  # fetches all record
+
+        if len(record) == 0:
+            if pic != "":
+                query = """UPDATE student SET rollno=%s, name=%s, pic=%s, class=%s WHERE rollno=%s AND class=%s"""
+                stdPicture = pic  # coverted pic in binary
+                updateTuple = (rollno, name, stdPicture, cls, prollno, pcls,)  # update parameters
+                result = cursor.execute(query, updateTuple)  # execute query with parameters
+            else:
+                query = """UPDATE student SET rollno=%s, name=%s, class=%s WHERE rollno=%s AND class=%s"""
+                updateTuple = (rollno, name, cls, prollno, pcls,)  # update parameters
+                result = cursor.execute(query, updateTuple)  # execute query with parameters
+
+            con.commit()
+            return True
+        else:
+            return False
+
+    except mysql.Error as error:
+        print("Failed updating data into MySQL table {}".format(error))
+        return False
+
+    finally:
+        if (con.is_connected()):
+            cursor.close()
+            con.close()
+            print("MySQL connection is closed")
+
 #deleting a student
 def deleteStudent(rollno, cls):
     try:
@@ -504,18 +551,16 @@ def readlframes(cls):
             password="",
             database="attenddb"
         )
-        l = []
+
         cursor = con.cursor()
-        queryatt = "SELECT lframe FROM attendancetbl WHERE class = %s AND ldate = %s"
+        queryatt = "SELECT * FROM attendancetbl WHERE class = %s AND ldate = %s"
         now = datetime.now()
         d = now.strftime('%d-%m-%Y')
         para = (cls, d,)
 
         cursor.execute(queryatt, para)
         record = cursor.fetchall()  # fetches all record
-        for row in record:
-            l.append(row[0])
-        return l
+        return record
 
     except mysql.Error as error:
         print("Failed reading data into MySQL table {}".format(error))

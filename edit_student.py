@@ -8,6 +8,11 @@
 import sys
 import model
 import view_student_support
+import cv2
+import os
+from tkinter import messagebox
+from tkinter.filedialog import askopenfilename
+from tkinter.messagebox import showerror
 
 try:
     import Tkinter as tk
@@ -51,6 +56,69 @@ def destroy_Toplevel1():
     w = None
 
 class Toplevel1:
+    def editStudent(self):
+        name = self.txtName.get()
+        cls = self.comboClass.get()
+        p = self.lblPicPath.cget("text")
+        proll = int(view_student_support.rval.get())
+        pcls = view_student_support.cval.get()
+
+        try:
+            roll = int(self.txtRoll.get())
+            if name != "" and cls != "Select Class" and roll != "":
+                istud = model.updateStudent(proll, pcls, roll, name, self.pic, cls)
+                if istud:
+                    messagebox.showinfo("Attendance - Edit Student", "Student updated succesfully!", master=root)
+                else:
+                    messagebox.showwarning("Attendance - Edit Student", "Failed to edit Student or roll no already exists!", master=root)
+            else:
+                messagebox.showwarning("Attendance - Edit Student", "Student Name, class, roll no is required!", master=root)
+        except ValueError:
+            messagebox.showwarning("Attendance - Edit Student",
+                                   "Only Numbers are allowed in the roll no field and the Picture should be clear!", master=root)
+
+    def load_file(self):
+        fname = askopenfilename(filetypes=(("Image Files", "*.jpg;*.jpeg;*.png;"), ("Template files", "*.tplate")),master=root)
+        f = os.path.basename(fname)
+        name = f.split(".")[0]
+        if fname:
+            try:
+                # print("""here it comes: self.settings["template"].set(fname)""",fname)
+                if self.txtName.get() == "":
+                    self.txtName.delete(0, "end")
+                    self.txtName.insert(0, name.upper())
+
+                self.lblPicPath.configure(text=f)
+            except:  # <- naked except is a bad idea
+                showerror("Open Source File", "Failed to read file\n'%s'" % fname)
+            self.pic = model.convertToBinaryData(fname)
+
+    def takePic(self):
+        cls = self.comboClass.get()
+        name = str(self.txtRoll.get())
+        if name != "" and cls != "Select Class":
+            cam = cv2.VideoCapture(0)
+
+            while True:
+                ret, img = cam.read()
+
+                cv2.imshow("Attendance", img)
+
+                if not ret:
+                    break
+
+                k = cv2.waitKey(1)
+
+                if k % 256 == 32:
+                    # For Space key
+
+                    file = cv2.imencode('.jpg', img)[1].tobytes()
+                    cam.release()
+                    cv2.destroyAllWindows()
+                    self.pic = file
+        else:
+            messagebox.showwarning("Attendance - Add Subject", "Student Name and class field is required!",master=root)
+
     def __init__(self, top=None):
         '''This class configures and populates the toplevel window.
            top is the toplevel containing window.'''
@@ -183,6 +251,7 @@ class Toplevel1:
         self.btnBrowsePic.configure(highlightcolor="black")
         self.btnBrowsePic.configure(pady="0")
         self.btnBrowsePic.configure(text='''Browse Picture''')
+        self.btnBrowsePic.configure(command=self.load_file)
 
         self.btnTakePic = tk.Button(self.Frame1)
         self.btnTakePic.place(relx=0.361, rely=0.519, height=53, width=166)
@@ -197,6 +266,7 @@ class Toplevel1:
         self.btnTakePic.configure(highlightcolor="black")
         self.btnTakePic.configure(pady="0")
         self.btnTakePic.configure(text='''Take Picture''')
+        self.btnTakePic.configure(command=self.takePic)
 
         self.lblPicPath = tk.Label(self.Frame1)
         self.lblPicPath.place(relx=0.377, rely=0.618, height=35, width=364)
@@ -204,6 +274,7 @@ class Toplevel1:
         self.lblPicPath.configure(disabledforeground="#a3a3a3")
         self.lblPicPath.configure(font=font10)
         self.lblPicPath.configure(foreground="#000000")
+        self.pic = ""
 
         self.btnEdit = tk.Button(self.Frame1)
         self.btnEdit.place(relx=0.361, rely=0.697, height=53, width=386)
@@ -218,6 +289,7 @@ class Toplevel1:
         self.btnEdit.configure(highlightcolor="black")
         self.btnEdit.configure(pady="0")
         self.btnEdit.configure(text='''Save''')
+        self.btnEdit.configure(command=self.editStudent)
 
 if __name__ == '__main__':
     vp_start_gui()

@@ -71,7 +71,7 @@ class Toplevel1:
                     self.txtRoll.delete(0, "end")
                     self.comboClass.current(0)
                 else:
-                    messagebox.showwarning("Attendance - Add Student", "Failed to Student or roll no already exists!", master=root)
+                    messagebox.showwarning("Attendance - Add Student", "Failed to add Student or roll no already exists!", master=root)
             else:
                 messagebox.showwarning("Attendance - Add Student", "Student Name, class, roll no and pic field is required!", master=root)
         except ValueError:

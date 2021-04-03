@@ -152,30 +152,36 @@ class mainTop:
 
                     if rl != [] and int(h1) < int(hs) or (int(h1) == int(hs) and int(m1) < int(ms)):
                         for row in rl:
-                            s2s = row.split("-")[0]
-                            h2s = s2s.split(":")[0]
-                            m2s = s2s.split(":")[1]
+                            if row[2] == selectSubject and row[3] == teacher and row[4] == lec and row[5] == t:
+                                ch = True
+                            else:
+                                ch = False
 
-                            s2 = row.split("-")[1]
-                            h2 = s2.split(":")[0]
-                            m2 = s2.split(":")[1]
+                            if ch == False:
+                                s2s = row[4].split("-")[0]
+                                h2s = s2s.split(":")[0]
+                                m2s = s2s.split(":")[1]
 
-                            if int(h1) < int(h2) and int(h1) >= int(h2s):
-                                print("First if")
-                                b = True
-                                break
-                            elif int(h1) == int(h2) and int(m1) < int(m2):
-                                print("Second If")
-                                b = True
-                                break
-                            elif int(h1) == int(hs) and int(m1) == int(ms):
-                                print("Third If")
-                                b = True
-                                break
-                            elif int(h1) < int(h2) and int(hs) >= int(h2s):
-                                print("Fourth if")
-                                b = True
-                                break
+                                s2 = row[4].split("-")[1]
+                                h2 = s2.split(":")[0]
+                                m2 = s2.split(":")[1]
+
+                                if int(h1) < int(h2) and int(h1) >= int(h2s):
+                                    print("First if")
+                                    b = True
+                                    break
+                                elif int(h1) == int(h2) and int(m1) < int(m2):
+                                    print("Second If")
+                                    b = True
+                                    break
+                                elif int(h1) == int(hs) and int(m1) == int(ms):
+                                    print("Third If")
+                                    b = True
+                                    break
+                                elif int(h1) < int(h2) and int(hs) >= int(h2s):
+                                    print("Fourth if")
+                                    b = True
+                                    break
 
                     if b == False and int(h1) < int(hs) or (int(h1) == int(hs) and int(m1) < int(ms)):
                         a = AttendancePro.Attend(selectClass, selectSubject, teacher, lec, t)
