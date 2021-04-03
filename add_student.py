@@ -62,7 +62,7 @@ class Toplevel1:
 
         try:
             roll = int(self.txtRoll.get())
-            if name != "" and cls != "Select Class" and roll != "" and p != "":
+            if name != "" and cls != "Select Class" and roll != "" and self.pic != "" or p != "":
                 istud = model.insertStudent(roll, name, self.pic, cls)
                 if istud:
                     messagebox.showinfo("Attendance - Add Student", "Student added succesfully!", master=root)
@@ -76,7 +76,7 @@ class Toplevel1:
                 messagebox.showwarning("Attendance - Add Student", "Student Name, class, roll no and pic field is required!", master=root)
         except ValueError:
             messagebox.showwarning("Attendance - Add Student",
-                                   "Only Numbers are allowed in the roll no field!", master=root)
+                                   "Only Numbers are allowed in the roll no field and the Picture should be clear!", master=root)
 
     def load_file(self):
         fname = askopenfilename(filetypes=(("Image Files", "*.jpg;*.jpeg;*.png;"), ("Template files", "*.tplate")),master=root)
@@ -92,7 +92,7 @@ class Toplevel1:
                 self.lblPicPath.configure(text=f)
             except:  # <- naked except is a bad idea
                 showerror("Open Source File", "Failed to read file\n'%s'" % fname)
-            self.pic = fname
+            self.pic = model.convertToBinaryData(fname)
 
     def takePic(self):
         cls = self.comboClass.get()
@@ -109,27 +109,14 @@ class Toplevel1:
                     break
 
                 k = cv2.waitKey(1)
-                # if k % 256 == 27:
-                #     # For Esc key
-                #     print("Close")
-                #     break
+
                 if k % 256 == 32:
                     # For Space key
 
-                    path = "C:/"
-                    ppath = os.path.join(path, f"xampp/htdocs/AttendanceFace/Images/{cls}")
-                    if os.path.exists(ppath):
-                        pass
-                    else:
-                        os.mkdir(ppath)
-                    # print("Image " + name + ".jpg saved")
-                    filePath = f'C:/xampp/htdocs/AttendanceFace/Images/{cls}/{name}.jpg'
-                    cv2.imwrite(filePath, img)
-                    file = os.path.basename(filePath)
-                    self.lblPicPath.configure(text=file)
+                    file = cv2.imencode('.jpg', img)[1].tobytes()
                     cam.release()
                     cv2.destroyAllWindows()
-                    self.pic = filePath
+                    self.pic = file
         else:
             messagebox.showwarning("Attendance - Add Subject", "Student Name and class field is required!",master=root)
 
@@ -287,6 +274,7 @@ class Toplevel1:
         self.lblPicPath.configure(foreground="#000000")
         self.lblPicPath.configure(highlightbackground="#d9d9d9")
         self.lblPicPath.configure(highlightcolor="black")
+        self.pic = ""
 
         self.Label1_1 = tk.Label(self.Frame1)
         self.Label1_1.place(relx=0.11, rely=0.134, height=45, width=167)

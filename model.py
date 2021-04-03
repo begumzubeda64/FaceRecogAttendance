@@ -33,15 +33,15 @@ def insertStudent(rollno, name, pic, cls):
         # print(db,"Connected")
         cursor = con.cursor()
 
-        queryclass = "SELECT * FROM student WHERE rollno = %s"
-        para = (rollno,)
+        queryclass = "SELECT * FROM student WHERE rollno = %s AND class = %s"
+        para = (rollno, cls,)
 
         cursor.execute(queryclass, para)
         record = cursor.fetchall()  # fetches all record
 
         if len(record) == 0:
             query = """INSERT INTO student(rollno, name, pic, class) VALUES (%s,%s,%s,%s)"""
-            stdPicture = convertToBinaryData(pic) #covert pic in binary
+            stdPicture = pic #coverted pic in binary
             insertTuple = (rollno, name, stdPicture, cls) #insert parameters
             result = cursor.execute(query, insertTuple) #execute query with parameters
             con.commit()

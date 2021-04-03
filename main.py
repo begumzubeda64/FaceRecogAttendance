@@ -109,9 +109,9 @@ class mainTop:
         teacher = self.txtTeacher.get()
         lec = self.txtLec.get()
         t = self.comboLecType.get()
-        p = re.compile('[0-2][0-9][:][0-5][0-9]-[0-2][0-9][:][0-5][0-9]')  # checks for pattern eg 12:00-13:00
+        p = re.compile('[0-2][0-9][:][0-5][0-9]-[0-2][0-9][:][0-5][0-9]$')  # checks for pattern eg 12:00-13:00
 
-        if lec != "" and p.match(lec):  # if you enter more than 23:59 time like 24:00 or 29:00 the 24 or 29 will be automatically be replaced by 23
+        if lec != "" and p.match(lec):  # if you enter more than 23:59 time like 24:00 or 29:00 the 24 or 29 will be automatically be replaced by 00
             s1 = lec.split("-")[0]
             sh1 = s1.split(":")[0]
             sm1 = s1.split(":")[1]
@@ -135,58 +135,60 @@ class mainTop:
                 ym = y.replace(sm2, "00")
                 lec = xm + "-" + ym
 
-        if c != () and s != ():
-            selectClass = self.scrollClass.get(c)
-            selectSubject = self.scrollSubject.get(s)
-            if selectClass != "Select Class" and selectSubject != "Select Subject" and teacher != "" and lec != "" and t != "Select Type":
-                rl = model.readlframes(selectClass)
-                b = False
+            if c != () and s != ():
+                selectClass = self.scrollClass.get(c)
+                selectSubject = self.scrollSubject.get(s)
+                if selectClass != "Select Class" and selectSubject != "Select Subject" and teacher != "" and lec != "" and t != "Select Type":
+                    rl = model.readlframes(selectClass)
+                    b = False
 
-                s1 = lec.split("-")[0]
-                h1 = s1.split(":")[0]
-                m1 = s1.split(":")[1]
+                    s1 = lec.split("-")[0]
+                    h1 = s1.split(":")[0]
+                    m1 = s1.split(":")[1]
 
-                ss = lec.split("-")[1]
-                hs = ss.split(":")[0]
-                ms = ss.split(":")[1]
+                    ss = lec.split("-")[1]
+                    hs = ss.split(":")[0]
+                    ms = ss.split(":")[1]
 
-                if rl != [] and int(h1) < int(hs) or (int(h1) == int(hs) and int(m1) < int(ms)):
-                    for row in rl:
-                        s2s = row.split("-")[0]
-                        h2s = s2s.split(":")[0]
-                        m2s = s2s.split(":")[1]
+                    if rl != [] and int(h1) < int(hs) or (int(h1) == int(hs) and int(m1) < int(ms)):
+                        for row in rl:
+                            s2s = row.split("-")[0]
+                            h2s = s2s.split(":")[0]
+                            m2s = s2s.split(":")[1]
 
-                        s2 = row.split("-")[1]
-                        h2 = s2.split(":")[0]
-                        m2 = s2.split(":")[1]
+                            s2 = row.split("-")[1]
+                            h2 = s2.split(":")[0]
+                            m2 = s2.split(":")[1]
 
-                        if int(h1) < int(h2) and int(h1) >= int(h2s):
-                            print("First if")
-                            b = True
-                            break
-                        elif int(h1) == int(h2) and int(m1) < int(m2):
-                            print("Second If")
-                            b = True
-                            break
-                        elif int(h1) == int(hs) and int(m1) == int(ms):
-                            print("Third If")
-                            b = True
-                            break
-                        elif int(h1) < int(h2) and int(hs) >= int(h2s):
-                            print("Fourth if")
-                            b = True
-                            break
+                            if int(h1) < int(h2) and int(h1) >= int(h2s):
+                                print("First if")
+                                b = True
+                                break
+                            elif int(h1) == int(h2) and int(m1) < int(m2):
+                                print("Second If")
+                                b = True
+                                break
+                            elif int(h1) == int(hs) and int(m1) == int(ms):
+                                print("Third If")
+                                b = True
+                                break
+                            elif int(h1) < int(h2) and int(hs) >= int(h2s):
+                                print("Fourth if")
+                                b = True
+                                break
 
-                if p.match(lec) and b == False and int(h1) < int(hs) or (int(h1) == int(hs) and int(m1) < int(ms)):
-                    a = AttendancePro.Attend(selectClass, selectSubject, teacher, lec, t)
-                    if a == False:
-                        messagebox.showinfo("Attendance", "No students in this class! Please add some students.", master=root)
+                    if b == False and int(h1) < int(hs) or (int(h1) == int(hs) and int(m1) < int(ms)):
+                        a = AttendancePro.Attend(selectClass, selectSubject, teacher, lec, t)
+                        if a == False:
+                            messagebox.showinfo("Attendance", "No students in this class! Please add some students.", master=root)
+                    else:
+                        messagebox.showwarning("Attendance", "Lecture Frame should match pattern like 08:00-13:00, 24 hour format, it should not exist in other time frame, start time and end time should not be same, and also start time should be less than end time", master=root)
                 else:
-                    messagebox.showwarning("Attendance", "Lecture Frame should match pattern like 08:00-13:00, 24 hour format, it should not exist in other time frame, start time and end time should not be same, and also start time should be less than end time", master=root)
+                    messagebox.showwarning("Attendance", "Class, Subject, teacher name, lecture frame and lecture type feilds are required! Note: If subject(s) are not available for the selected class please do add subjects.", master=root)
             else:
-                messagebox.showwarning("Attendance", "Class, Subject, teacher name, lecture frame and lecture type feilds are required! Note: If subject(s) are not available for the selected class please do add subjects.", master=root)
+                messagebox.showwarning("Attendance", "Class field and Subject field is required! Note: If subject(s) are not available for the selected class please do add subjects.", master=root)
         else:
-            messagebox.showwarning("Attendance", "Class field and Subject field is required! Note: If subject(s) are not available for the selected class please do add subjects.", master=root)
+            messagebox.showwarning("Attendance", "Lecture Frame should match pattern like 08:00-13:00, 24 hour format, it should not exist in other time frame, start time and end time should not be same, and also start time should be less than end time", master=root)
 
     def __init__(self, top=None):
         '''This class configures and populates the toplevel window.
