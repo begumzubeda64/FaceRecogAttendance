@@ -240,6 +240,52 @@ def insertClass(name):
             cursor.close()
             con.close()
 
+#updating class
+def updateClass(pname, name):
+    try:
+        # connecting to database
+        con = mysql.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="attenddb"
+        )
+
+        # print(db,"Connected")
+        cursor = con.cursor()
+
+        queryclass = "SELECT * FROM classtbl WHERE class = %s"
+        para = (name,)
+        cursor.execute(queryclass, para)
+        record = cursor.fetchall()  # fetches all record
+
+        if len(record) == 0:
+            cquery = """UPDATE classtbl SET class=%s WHERE class=%s"""
+            cTuple = (name, pname,) #update parameters
+            cursor.execute(cquery, cTuple) #execute query with parameters
+
+            squery = """UPDATE subjecttbl SET class=%s WHERE class=%s"""
+            sTuple = (name, pname,)  # update parameters
+            cursor.execute(squery, sTuple)  # execute query with parameters
+
+            stquery = """UPDATE student SET class=%s WHERE class=%s"""
+            stTuple = (name, pname,)  # update parameters
+            cursor.execute(stquery, stTuple)  # execute query with parameters
+
+            con.commit()
+            return True
+        else:
+            return False
+
+    except mysql.Error as error:
+        print("Failed inserting data into MySQL table {}".format(error))
+        return False
+
+    finally:
+        if (con.is_connected()):
+            cursor.close()
+            con.close()
+
 #read all class-- values is an array
 def readAllClass(values):
     try:
