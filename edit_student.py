@@ -69,6 +69,7 @@ class Toplevel1:
                 istud = model.updateStudent(proll, pcls, roll, name, self.pic, cls)
                 if istud:
                     messagebox.showinfo("Attendance - Edit Student", "Student updated succesfully!", master=root)
+                    root.destroy()
                 else:
                     messagebox.showwarning("Attendance - Edit Student", "Failed to edit Student or roll no already exists!", master=root)
             else:

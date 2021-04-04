@@ -7,6 +7,7 @@
 
 import sys
 import model
+from tkinter import messagebox
 
 try:
     import Tkinter as tk
@@ -51,6 +52,22 @@ def destroy_Toplevel1():
     w = None
 
 class Toplevel1:
+    def editSubject(self):
+        name = self.txtSubName.get()
+        cls = self.comboCls.get()
+        pname = view_subject_support.sval.get()
+        pcls = view_subject_support.cval.get()
+
+        if name != "" and cls != "Select Class":
+            isub = model.updateSubject(pname, pcls, name, cls)
+            if isub:
+                messagebox.showinfo("Attendance - Edit Subject", "Subject updated succesfully!", master=root)
+                root.destroy()
+            else:
+                messagebox.showwarning("Attendance - Edit Subject", "Failed to update subject or subject already exists!", master=root)
+        else:
+            messagebox.showwarning("Attendance - Edit Subject", "Subject Name and class field is required!", master=root)
+
     def __init__(self, top=None):
         '''This class configures and populates the toplevel window.
            top is the toplevel containing window.'''
@@ -145,6 +162,7 @@ class Toplevel1:
         self.btnEditSub.configure(highlightcolor="black")
         self.btnEditSub.configure(pady="0")
         self.btnEditSub.configure(text='''Save''')
+        self.btnEditSub.configure(command=self.editSubject)
 
 if __name__ == '__main__':
     vp_start_gui()

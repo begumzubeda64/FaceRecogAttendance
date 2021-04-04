@@ -333,9 +333,48 @@ def insertSubject(name, cls):
             result = cursor.execute(query, insertTuple) #execute query with parameters
             con.commit()
             return True
+        else:
+            return False
 
     except mysql.Error as error:
         print("Failed inserting data into MySQL table {}".format(error))
+        return False
+
+    finally:
+        if (con.is_connected()):
+            cursor.close()
+            con.close()
+
+#update subject
+def updateSubject(pname, pcls, name, cls):
+    try:
+        # connecting to database
+        con = mysql.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="attenddb"
+        )
+
+        # print(db,"Connected")
+        cursor = con.cursor()
+
+        querysub = "SELECT * FROM subjecttbl WHERE subject = %s AND class = %s"
+        para = (name,cls,)
+        cursor.execute(querysub, para)
+        record = cursor.fetchall()  # fetches all record
+
+        if len(record) == 0:
+            query = """UPDATE subjecttbl SET subject=%s, class=%s WHERE subject=%s AND class=%s"""
+            updateTuple = (name,cls,pname,pcls,) #update parameters
+            result = cursor.execute(query, updateTuple) #execute query with parameters
+            con.commit()
+            return True
+        else:
+            return False
+
+    except mysql.Error as error:
+        print("Failed updating data into MySQL table {}".format(error))
         return False
 
     finally:
