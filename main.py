@@ -178,7 +178,7 @@ class mainTop:
                                     print("Third If")
                                     b = True
                                     break
-                                elif int(h1) < int(h2) and int(hs) > int(h2s) or (int(hs) == int(h2s) and int(ms) >= int(m2s)):
+                                elif int(h1) < int(h2) and int(hs) > int(h2s) or (int(hs) == int(h2s) and int(ms) > int(m2s)):
                                     print("Fourth if")
                                     b = True
                                     break
