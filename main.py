@@ -152,7 +152,7 @@ class mainTop:
 
                     if rl != [] and int(h1) < int(hs) or (int(h1) == int(hs) and int(m1) < int(ms)):
                         for row in rl:
-                            if row[2] == selectSubject and row[3] == teacher and row[4] == lec and row[5] == t:
+                            if row[2] == selectSubject and row[4] == lec and row[5] == t:
                                 ch = True
                             else:
                                 ch = False
@@ -183,9 +183,13 @@ class mainTop:
                                     b = True
                                     break
 
-                    if b == False and int(h1) < int(hs) or (int(h1) == int(hs) and int(m1) < int(ms)):
+                    if not b and int(h1) < int(hs):
                         a = AttendancePro.Attend(selectClass, selectSubject, teacher, lec, t)
-                        if a == False:
+                        if not a:
+                            messagebox.showinfo("Attendance", "No students in this class! Please add some students.", master=root)
+                    elif not b and int(h1) == int(hs) and int(m1) < int(ms):
+                        a = AttendancePro.Attend(selectClass, selectSubject, teacher, lec, t)
+                        if not a:
                             messagebox.showinfo("Attendance", "No students in this class! Please add some students.", master=root)
                     else:
                         messagebox.showwarning("Attendance", "Lecture Frame should match pattern like 08:00-13:00, 24 hour format, it should not exist in other time frame, start time and end time should not be same, and also start time should be less than end time", master=root)
