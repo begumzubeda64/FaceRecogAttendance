@@ -411,8 +411,8 @@ class mainTop:
             label="Subject", command=self.navSubject)
         self.sub_menu1.add_command(
             label="Class", command=self.navClass)
-        self.menubar.add_command(
-            label="Reports")
+        # self.menubar.add_command(
+        #     label="Reports")
         self.menubar.add_command(
             label="Change Password", command=self.navChPass)
         self.menubar.add_command(

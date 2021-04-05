@@ -12,6 +12,7 @@ from tkinter import messagebox
 import model
 from tkinter.filedialog import askopenfilename
 from tkinter.messagebox import showerror
+import numpy as np
 
 try:
     import Tkinter as tk
@@ -62,7 +63,7 @@ class Toplevel1:
 
         try:
             roll = int(self.txtRoll.get())
-            if name != "" and cls != "Select Class" and roll != "" and self.pic != "" or p != "":
+            if name != "" and cls != "Select Class" and roll != "" and self.pic != "":
                 istud = model.insertStudent(roll, name, self.pic, cls)
                 if istud:
                     messagebox.showinfo("Attendance - Add Student", "Student added succesfully!", master=root)
@@ -73,10 +74,22 @@ class Toplevel1:
                 else:
                     messagebox.showwarning("Attendance - Add Student", "Failed to add Student or roll no already exists!", master=root)
             else:
-                messagebox.showwarning("Attendance - Add Student", "Student Name, class, roll no and pic field is required!", master=root)
+                messagebox.showwarning("Attendance - Add Student", "Student Name, class, roll no and clear face pic is required!", master=root)
         except ValueError:
             messagebox.showwarning("Attendance - Add Student",
                                    "Only Numbers are allowed in the roll no field and the Picture should be clear!", master=root)
+
+    def rec_face(self, file):
+        # Load the cascade
+        face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+        # Read the input image in byte string
+        i = np.frombuffer(file, dtype='uint8')
+        img = cv2.imdecode(i, cv2.IMREAD_UNCHANGED)
+        # Convert into grayscale
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        # Detect faces
+        faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+        return len(faces)
 
     def load_file(self):
         fname = askopenfilename(filetypes=(("Image Files", "*.jpg;*.jpeg;*.png;"), ("Template files", "*.tplate")),master=root)
@@ -92,7 +105,12 @@ class Toplevel1:
                 self.lblPicPath.configure(text=f)
             except:  # <- naked except is a bad idea
                 showerror("Open Source File", "Failed to read file\n'%s'" % fname)
-            self.pic = model.convertToBinaryData(fname)
+
+            faces = self.rec_face(model.convertToBinaryData(fname))
+            if (faces > 0):
+                self.pic = model.convertToBinaryData(fname)
+            else:
+                self.pic = ""
 
     def takePic(self):
         cls = self.comboClass.get()
@@ -116,7 +134,11 @@ class Toplevel1:
                     file = cv2.imencode('.jpg', img)[1].tobytes()
                     cam.release()
                     cv2.destroyAllWindows()
-                    self.pic = file
+                    faces = self.rec_face(file)
+                    if faces > 0:
+                        self.pic = file
+                    else:
+                        self.pic = ""
         else:
             messagebox.showwarning("Attendance - Add Subject", "Student Name and class field is required!",master=root)
 
