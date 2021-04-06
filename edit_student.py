@@ -14,6 +14,7 @@ from tkinter import messagebox
 from tkinter.filedialog import askopenfilename
 from tkinter.messagebox import showerror
 import numpy as np
+import face_recognition
 
 try:
     import Tkinter as tk
@@ -88,11 +89,7 @@ class Toplevel1:
         # Convert into grayscale
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         # Detect faces
-        faces = face_cascade.detectMultiScale(
-            gray,
-            scaleFactor=1.1,
-            minNeighbors=5
-        )
+        faces = face_recognition.face_locations(gray)
         return len(faces)
 
     def load_file(self):
