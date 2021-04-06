@@ -74,7 +74,7 @@ class Toplevel1:
                 else:
                     messagebox.showwarning("Attendance - Add Student", "Failed to add Student or roll no already exists!", master=root)
             else:
-                messagebox.showwarning("Attendance - Add Student", "Student Name, class, roll no and clear face pic is required!", master=root)
+                messagebox.showwarning("Attendance - Add Student", "Student Name, class, roll no and one clear face pic is required!", master=root)
         except ValueError:
             messagebox.showwarning("Attendance - Add Student",
                                    "Only Numbers are allowed in the roll no field and the Picture should be clear!", master=root)
@@ -88,7 +88,11 @@ class Toplevel1:
         # Convert into grayscale
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         # Detect faces
-        faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+        faces = face_cascade.detectMultiScale(
+            gray,
+            scaleFactor=1.1,
+            minNeighbors=5
+        )
         return len(faces)
 
     def load_file(self):
@@ -107,7 +111,7 @@ class Toplevel1:
                 showerror("Open Source File", "Failed to read file\n'%s'" % fname)
 
             faces = self.rec_face(model.convertToBinaryData(fname))
-            if (faces > 0):
+            if faces == 1:
                 self.pic = model.convertToBinaryData(fname)
             else:
                 self.pic = ""
@@ -135,7 +139,7 @@ class Toplevel1:
                     cam.release()
                     cv2.destroyAllWindows()
                     faces = self.rec_face(file)
-                    if faces > 0:
+                    if faces == 1:
                         self.pic = file
                     else:
                         self.pic = ""

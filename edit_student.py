@@ -88,7 +88,11 @@ class Toplevel1:
         # Convert into grayscale
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         # Detect faces
-        faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+        faces = face_cascade.detectMultiScale(
+            gray,
+            scaleFactor=1.1,
+            minNeighbors=5
+        )
         return len(faces)
 
     def load_file(self):
@@ -108,11 +112,11 @@ class Toplevel1:
             self.pic = model.convertToBinaryData(fname)
 
             faces = self.rec_face(model.convertToBinaryData(fname))
-            if (faces > 0):
+            if faces == 1:
                 self.pic = model.convertToBinaryData(fname)
             else:
                 self.pic = ""
-                messagebox.showwarning("Attendance - Edit Student", "Please select a clear face pic!", master=root)
+                messagebox.showwarning("Attendance - Edit Student", "Please select a one clear face pic!", master=root)
 
     def takePic(self):
         cls = self.comboClass.get()
@@ -137,11 +141,11 @@ class Toplevel1:
                     cam.release()
                     cv2.destroyAllWindows()
                     faces = self.rec_face(file)
-                    if faces > 0:
+                    if faces == 1:
                         self.pic = file
                     else:
                         self.pic = ""
-                        messagebox.showwarning("Attendance - Edit Student", "Please take a clear face pic!", master=root)
+                        messagebox.showwarning("Attendance - Edit Student", "Please take a one clear face pic!", master=root)
         else:
             messagebox.showwarning("Attendance - Add Subject", "Student Name and class field is required!",master=root)
 
