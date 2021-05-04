@@ -82,7 +82,7 @@ class Toplevel1:
 
     def rec_face(self, file):
         # Load the cascade
-        face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+        #face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
         # Read the input image in byte string
         i = np.frombuffer(file, dtype='uint8')
         img = cv2.imdecode(i, cv2.IMREAD_UNCHANGED)
