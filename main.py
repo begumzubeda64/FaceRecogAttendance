@@ -351,7 +351,7 @@ class mainTop:
         self.comboLecType = ttk.Combobox(self.Frame1)
         self.comboLecType.place(relx=0.641, rely=0.462, relheight=0.068
                 , relwidth=0.323)
-        self.value_list = ['Select Type','Lecture','Practical','Workshop/Seminar',]
+        self.value_list = ['Select Type','Lecture','Practical',]
         self.comboLecType.configure(values=self.value_list)
         self.comboLecType.configure(state='readonly')
         self.comboLecType.configure(font="-family {Yu Gothic UI Semibold} -size 12 -weight bold -slant roman -underline 0 -overstrike 0")
