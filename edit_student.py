@@ -95,8 +95,10 @@ class Toplevel1:
     def load_file(self):
         fname = askopenfilename(filetypes=(("Image Files", "*.jpg;*.jpeg;*.png;"), ("Template files", "*.tplate")),master=root)
         f = os.path.basename(fname)
+
         name = f.split(".")[0]
         if fname:
+            s = os.path.getsize(fname)
             try:
                 # print("""here it comes: self.settings["template"].set(fname)""",fname)
                 if self.txtName.get() == "":
@@ -109,11 +111,11 @@ class Toplevel1:
             self.pic = model.convertToBinaryData(fname)
 
             faces = self.rec_face(model.convertToBinaryData(fname))
-            if faces == 1:
+            if faces == 1 and s <= 5242880:
                 self.pic = model.convertToBinaryData(fname)
             else:
                 self.pic = ""
-                messagebox.showwarning("Attendance - Edit Student", "Please select a one clear face pic!", master=root)
+                messagebox.showwarning("Attendance - Edit Student", "Please select a one clear face pic of max size 5MB!", master=root)
 
     def takePic(self):
         cls = self.comboClass.get()

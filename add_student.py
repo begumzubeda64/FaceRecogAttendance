@@ -75,14 +75,14 @@ class Toplevel1:
                 else:
                     messagebox.showwarning("Attendance - Add Student", "Failed to add Student or roll no already exists!", master=root)
             else:
-                messagebox.showwarning("Attendance - Add Student", "Student Name, class, roll no and one clear face pic is required!", master=root)
+                messagebox.showwarning("Attendance - Add Student", "Student Name, class, roll no and one clear face pic of max size 5MB is required!", master=root)
         except ValueError:
             messagebox.showwarning("Attendance - Add Student",
                                    "Only Numbers are allowed in the roll no field and the Picture should be clear!", master=root)
 
     def rec_face(self, file):
         # Load the cascade
-        face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+        #face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
         # Read the input image in byte string
         i = np.frombuffer(file, dtype='uint8')
         img = cv2.imdecode(i, cv2.IMREAD_UNCHANGED)
@@ -95,8 +95,10 @@ class Toplevel1:
     def load_file(self):
         fname = askopenfilename(filetypes=(("Image Files", "*.jpg;*.jpeg;*.png;"), ("Template files", "*.tplate")),master=root)
         f = os.path.basename(fname)
+
         name = f.split(".")[0]
         if fname:
+            s = os.path.getsize(fname)
             try:
                 # print("""here it comes: self.settings["template"].set(fname)""",fname)
                 if self.txtName.get() == "":
@@ -108,7 +110,7 @@ class Toplevel1:
                 showerror("Open Source File", "Failed to read file\n'%s'" % fname)
 
             faces = self.rec_face(model.convertToBinaryData(fname))
-            if faces == 1:
+            if faces == 1 and s <= 5242880:
                 self.pic = model.convertToBinaryData(fname)
             else:
                 self.pic = ""
