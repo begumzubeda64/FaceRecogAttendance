@@ -25,6 +25,7 @@ def insertStudent(rollno, name, pic, cls):
         # connecting to database
         con = mysql.connect(
             host="localhost",
+            port=3308,
             user="root",
             password="",
             database="attenddb"
@@ -65,6 +66,7 @@ def readStudent(cls):
         # connecting to database
         con = mysql.connect(
             host="localhost",
+            port=3308,
             user="root",
             password="",
             database="attenddb"
@@ -99,6 +101,7 @@ def readAllStudent(cls, values):
         # connecting to database
         con = mysql.connect(
             host="localhost",
+            port=3308,
             user="root",
             password="",
             database="attenddb"
@@ -134,6 +137,7 @@ def updateStudent(prollno, pcls, rollno, name, pic, cls):
         # connecting to database
         con = mysql.connect(
             host="localhost",
+            port=3308,
             user="root",
             password="",
             database="attenddb"
@@ -181,6 +185,7 @@ def deleteStudent(rollno, cls):
         # connecting to database
         con = mysql.connect(
             host="localhost",
+            port=3308,
             user="root",
             password="",
             database="attenddb"
@@ -211,6 +216,7 @@ def insertClass(name):
         # connecting to database
         con = mysql.connect(
             host="localhost",
+            port=3308,
             user="root",
             password="",
             database="attenddb"
@@ -246,6 +252,7 @@ def updateClass(pname, name):
         # connecting to database
         con = mysql.connect(
             host="localhost",
+            port=3308,
             user="root",
             password="",
             database="attenddb"
@@ -292,6 +299,7 @@ def readAllClass(values):
         # connecting to database
         con = mysql.connect(
             host="localhost",
+            port=3308,
             user="root",
             password="",
             database="attenddb"
@@ -322,6 +330,7 @@ def deleteClass(cls):
         # connecting to database
         con = mysql.connect(
             host="localhost",
+            port=3308,
             user="root",
             password="",
             database="attenddb"
@@ -360,6 +369,7 @@ def insertSubject(name, cls):
         # connecting to database
         con = mysql.connect(
             host="localhost",
+            port=3308,
             user="root",
             password="",
             database="attenddb"
@@ -397,6 +407,7 @@ def updateSubject(pname, pcls, name, cls):
         # connecting to database
         con = mysql.connect(
             host="localhost",
+            port=3308,
             user="root",
             password="",
             database="attenddb"
@@ -434,6 +445,7 @@ def readSubject(cls, values):
         # connecting to database
         con = mysql.connect(
             host="localhost",
+            port=3308,
             user="root",
             password="",
             database="attenddb"
@@ -465,6 +477,7 @@ def deleteSubject(sub, cls):
         # connecting to database
         con = mysql.connect(
             host="localhost",
+            port=3308,
             user="root",
             password="",
             database="attenddb"
@@ -494,6 +507,7 @@ def insertLec(cls, name, sub, t, lf, ty, d):
         # connecting to database
         con = mysql.connect(
             host="localhost",
+            port=3308,
             user="root",
             password="",
             database="attenddb"
@@ -528,6 +542,7 @@ def insertAccount(user, p):
         # connecting to database
         con = mysql.connect(
             host="localhost",
+            port=3308,
             user="root",
             password="",
             database="attenddb"
@@ -555,6 +570,7 @@ def readAccount(user):
         # connecting to database
         con = mysql.connect(
             host="localhost",
+            port=3308,
             user="root",
             password="",
             database="attenddb"
@@ -587,6 +603,7 @@ def changePassword(p, new_p):
         # connecting to database
         con = mysql.connect(
             host="localhost",
+            port=3308,
             user="root",
             password="",
             database="attenddb"
@@ -632,6 +649,7 @@ def readlframes(cls):
         # connecting to database
         con = mysql.connect(
             host="localhost",
+            port=3308,
             user="root",
             password="",
             database="attenddb"
@@ -655,3 +673,6 @@ def readlframes(cls):
         if (con.is_connected()):
             cursor.close()
             con.close()
+
+# pwd = hash_password("master1234")
+# insertAccount("admin", pwd)
